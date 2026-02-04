@@ -1,5 +1,5 @@
 import {useState} from 'react';
-function ItemForm(){
+function ItemForm(props){
      const [name , setName] = useState("");
      const [desc , setDesc] = useState("");
      const [contact , setContact] = useState("");
@@ -11,7 +11,12 @@ function ItemForm(){
        const itemData = {
         name,desc,contact,status,img
        };
-       console.log(itemData)
+       props.onAddItem(itemData);
+       setName("");
+       setDesc("");
+       setContact("");
+       setStatus("lost");
+       setImg(null);
      }
     return(
         <form className="itemForm" onSubmit={handleSubmit}>

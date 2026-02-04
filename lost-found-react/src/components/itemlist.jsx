@@ -1,4 +1,4 @@
-function ItemList({items , onDeleteItem}){
+function ItemList({items , onDeleteItem , onEditItem}){
  return (
     <div>
         <h2>Items List</h2>
@@ -10,6 +10,8 @@ function ItemList({items , onDeleteItem}){
                 <p>Contact: {item.contact}</p>
                 <span>{item.status}</span>
                 <button onClick={() => {onDeleteItem(index)}}> Delete </button>
+                <button onClick={() => {onEditItem(item)}}> Edit </button>
+                
             </div>  
         ))}
     </div>

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 function ItemForm(props){
      const [name , setName] = useState("");
      const [desc , setDesc] = useState("");
@@ -9,15 +9,32 @@ function ItemForm(props){
      function handleSubmit(e) {
        e.preventDefault();
        const itemData = {
+        id: props.editingItem ? props.editingItem.id : Date.now(),
         name,desc,contact,status,img
        };
-       props.onAddItem(itemData);
-       setName("");
-       setDesc("");
-       setContact("");
-       setStatus("lost");
-       setImg(null);
+       if(props.editingItem){
+        props.onUpdateItem(itemData);
+       }else{
+        props.onAddItem(itemData);
+       }
+       resetForm();
      }
+     function resetForm(){
+        setName("");
+        setDesc("");
+        setContact("");
+        setStatus("lost");
+        setImg(null);
+     }
+     useEffect(() => {
+        if(props.editingItem){
+            setName(props.editingItem.name);
+            setDesc(props.editingItem.desc);
+            setContact(props.editingItem.contact);
+            setStatus(props.editingItem.status);
+            setImg(props.editingItem.img);
+        }
+    }, [props.editingItem]);
     return(
         <form className="itemForm" onSubmit={handleSubmit}>
             <h2>Fill Item Information :</h2>
@@ -29,7 +46,7 @@ function ItemForm(props){
                 <option value="lost">Lost</option>
                 <option value="found">Found</option>
             </select><br/>
-            <button type="submit">Add Item</button>
+            <button type="submit">{props.editingItem ? "Update Item" : "Add Item"}</button>
         </form>
     );
 }

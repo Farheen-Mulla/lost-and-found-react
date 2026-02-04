@@ -6,6 +6,19 @@ import ItemList from './components/itemlist.jsx';
 function App(){
   const [items , setItems] = useState([]);
   const [editingItem , setEditingItem] = useState(null);
+  const [searchQuery , setSearchQuery] = useState("");
+  const[searchStatus , setSearchStatus] = useState("all");
+
+  const filteredItems = items.filter(item => 
+  { const matchesQuery = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.status.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = searchStatus === "all" || item.status === searchStatus;
+
+    return matchesQuery && matchesStatus;
+  }
+    
+  );
   function addItem(newItem){
     setItems(prev => [...prev , newItem]);
   }
@@ -23,9 +36,9 @@ function App(){
   return(
     <div>
        <h1>React version of lost-and-found-app started.</h1>
-       <Header />
+       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} searchStatus={searchStatus} onStatusChange={setSearchStatus}/>
        <ItemForm onAddItem={addItem} editingItem={editingItem} onUpdateItem={handleUpdateItem}/>
-       <ItemList items={items} onDeleteItem={handleDelete} onEditItem={handleEdit}/>
+       <ItemList items={filteredItems} onDeleteItem={handleDelete} onEditItem={handleEdit}/>
 
     </div>
     

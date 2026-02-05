@@ -30,7 +30,7 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
                                         Edit
                                     </button>
                                     <button 
-                                        onClick={() => { onDeleteItem(index); setOpenMenuIndex(null); }}
+                                        onClick={() => { onDeleteItem(item.id); setOpenMenuIndex(null); }}
                                         className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 font-bold"
                                     >
                                         Delete

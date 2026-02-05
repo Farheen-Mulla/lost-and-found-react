@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState  , useEffect} from 'react';
 import Header from './components/header.jsx';
 import ItemForm from './components/itemform.jsx';
 import ItemList from './components/itemlist.jsx';
@@ -9,6 +9,20 @@ function App(){
   const [editingItem , setEditingItem] = useState(null);
   const [searchQuery , setSearchQuery] = useState("");
   const[searchStatus , setSearchStatus] = useState("all");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("items");
+    if(saved){
+      setItems(JSON.parse(saved));
+    }
+  },[]);
+
+  useEffect(() => {
+    if(items.length>0){
+     const itemsWithoutImages = items.map(({img, ...rest}) => rest);
+    localStorage.setItem("items", JSON.stringify(itemsWithoutImages));
+    }
+  },[items]);
 
   const filteredItems = items.filter(item => 
   { const matchesQuery = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -23,8 +37,8 @@ function App(){
   function addItem(newItem){
     setItems(prev => [...prev , newItem]);
   }
-  function handleDelete(index){
-      setItems(items.filter((_ , i) => i !==index))
+  function handleDelete(id){
+      setItems(prev => prev.filter(item => item.id !== id));
   }
   function handleEdit(item){
       setEditingItem(item);

@@ -2,6 +2,7 @@ import {useState} from 'react';
 import Header from './components/header.jsx';
 import ItemForm from './components/itemform.jsx';
 import ItemList from './components/itemlist.jsx';
+import Footer from './components/footer.jsx';
 
 function App(){
   const [items , setItems] = useState([]);
@@ -35,11 +36,11 @@ function App(){
 
   return(
     <div>
-       <h1>React version of lost-and-found-app started.</h1>
+       <h1 className="bg-blue-500 text-white p-4">React version of lost-and-found-app started.</h1>
        <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} searchStatus={searchStatus} onStatusChange={setSearchStatus}/>
        <ItemForm onAddItem={addItem} editingItem={editingItem} onUpdateItem={handleUpdateItem}/>
        <ItemList items={filteredItems} onDeleteItem={handleDelete} onEditItem={handleEdit}/>
-
+      <Footer />
     </div>
     
   )

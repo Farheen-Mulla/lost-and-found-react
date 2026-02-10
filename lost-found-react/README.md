@@ -1,16 +1,103 @@
-# React + Vite
+# Lost & Found Web App 🧭
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack Lost & Found web application where users can post lost or found items, search through listings, and contact item owners.  
+Currently built with React on the frontend and will be extended with a backend (Node.js, Express, MongoDB).
 
-Currently, two official plugins are available:
+## Live Demo
+👉 https://your-vercel-link.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+### Current (Frontend)
+- Landing page with navigation
+- Submit lost/found items
+- View all submitted items
+- Search & filter items
+- Fake authentication flow (login required for actions)
+- Data persistence using localStorage
+- Responsive UI with Tailwind CSS
+- Client-side routing using React Router
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Planned (Backend)
+- Real user authentication (JWT)
+- User accounts
+- Database storage (MongoDB)
+- Image upload (Cloudinary)
+- Ownership tracking of items
+- Real contact system
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend
+- React
+- React Router DOM
+- Tailwind CSS
+- Vite
+- LocalStorage
+
+### Backend (Planned)
+- Node.js
+- Express.js
+- MongoDB
+- JWT Authentication
+- Cloudinary (image storage)
+
+## Screenshots
+
+![Landing Page](./screenshots/landing.png)
+![Submit Page](./screenshots/submit.png)
+![Items Page](./screenshots/items.png)
+![Login Page](./screenshots/login.png)
+
+## How to Run Locally
+
+bash:
+git clone https://github.com/Farheen-Mulla/lost-and-found-react.git
+cd your-repo-name
+npm install
+npm run dev
+
+# 🧠 Project Flow
+User lands on public landing page  
+Can navigate to submit or items  
+Search or submit redirects to login  
+After login, full app is accessible  
+Items are stored in LocalStorage  
+
+# 🔐 Authentication
+Currently implemented using fake auth (frontend only).  
+Real authentication will be added in backend phase.  
+
+# 📦 Current Limitations
+No real user accounts  
+No real database  
+Images not persisted after refresh  
+Anyone can edit/delete any item  
+These will be fixed in backend phase.  
+
+# 🛣 Roadmap
+## Phase 1 (Done)
+Frontend UI  
+Routing  
+LocalStorage  
+Fake auth  
+Deployment  
+
+## Phase 2 (Next)
+Node.js + Express backend  
+MongoDB database  
+Real authentication  
+Image upload  
+User ownership system  
+
+# 💼 Why I Built This
+This project is built for:  
+Learning full-stack development  
+Portfolio / resume  
+Real-world React architecture  
+Deployment workflow  
+
+# 👨‍💻 Author
+Farheen Mulla
+AI x Full-Stack Developer (in progress)  
+LinkedIn: https://www.linkedin.com/in/farheen-mulla-413335335/

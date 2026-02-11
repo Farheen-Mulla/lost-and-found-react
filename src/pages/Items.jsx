@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
-import ItemList from "../components/TempList";
-import ItemForm from "../components/TempForm";
+import ItemList from "../components/ItemList";
+import ItemForm from "../components/ItemForm";
 
 export default function Items({
   items,

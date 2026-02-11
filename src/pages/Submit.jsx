@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
-import ItemForm from "../components/ItemForm";
+import ItemForm from "../components/FixForm";
 
 export default function Submit({addItem, isLoggedIn, onLogout}) {
   const navigate = useNavigate();

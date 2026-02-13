@@ -66,7 +66,7 @@ function App() {
 
       <Route 
         path="/submit" 
-        element={<Submit addItem={addItem} isLoggedIn={isLoggedIn} />} 
+        element={<Submit addItem={addItem} isLoggedIn={isLoggedIn} onLogout={handleLogout}/>} 
       />
 
       <Route 

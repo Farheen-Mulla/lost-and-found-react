@@ -4,7 +4,7 @@ A full-stack Lost & Found web application where users can post lost or found ite
 Currently built with React on the frontend and will be extended with a backend (Node.js, Express, MongoDB).
 
 ## Live Demo
-👉 https://your-vercel-link.vercel.app
+👉 https://lost-and-found-react.vercel.app/
 
 ## Features
 

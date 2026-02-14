@@ -53,7 +53,7 @@ Currently built with React on the frontend and will be extended with a backend (
 
 bash:
 git clone https://github.com/Farheen-Mulla/lost-and-found-react.git
-cd your-repo-name
+cd lost-and-found-react
 npm install
 npm run dev
 

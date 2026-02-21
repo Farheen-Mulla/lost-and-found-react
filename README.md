@@ -65,9 +65,9 @@ FINDIT-PROJECT/
 
 ## Screenshots
 
-![Landing Page](./screenshots/landing.png)
-![Submit Page](./screenshots/submit.png)
-![Items Page](./screenshots/items.png)
+![Landing Page](./lost-found-react/screenshots/landing.png)
+![Submit Page](./lost-found-react/screenshots/submit.png)
+![Items Page](./lost-found-react/screenshots/items.png)
 ![Login Page](./screenshots/login.png)
 
 ## How to Run Locally

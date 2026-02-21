@@ -1,7 +1,8 @@
-# Lost & Found Web App 🧭
+# Lost & Found Web App - Full Stack Web Application🧭
 
-A full-stack Lost & Found web application where users can post lost or found items, search through listings, and contact item owners.  
-Currently built with React on the frontend and will be extended with a backend (Node.js, Express, MongoDB).
+Lost & Found is a full-stack web application that allows users to report lost or found items, browse listings, and manage item ownership. 
+
+The project follows a scalable full-stack architecture with React (frontend) and Node.js/Express (backend), currently transitioning from a frontend-only MVP to a fully integrated backend system.
 
 ## Live Demo
 👉 https://lost-and-found-react.vercel.app/
@@ -53,6 +54,15 @@ This is part of the next development phase.
 - JWT Authentication
 - Cloudinary (image storage)
 
+## 📂 Project Structure
+
+FINDIT-PROJECT/
+│
+├── lost-found-React/        # Frontend (React + Vite)
+├── lost-found-backend/      # Backend (Node.js + Express)
+└── README.md
+
+
 ## Screenshots
 
 ![Landing Page](./screenshots/landing.png)
@@ -62,7 +72,9 @@ This is part of the next development phase.
 
 ## How to Run Locally
 
-bash:
+```bash
+command
+```
 git clone https://github.com/Farheen-Mulla/lost-and-found-react.git
 cd lost-and-found-react
 npm install
@@ -101,12 +113,15 @@ Real authentication
 Image upload  
 User ownership system  
 
-# 💼 Why I Built This
-This project is built for:  
-Learning full-stack development  
-Portfolio / resume  
-Real-world React architecture  
-Deployment workflow  
+## 💼 Why I Built This
+
+This project was built to:
+
+- Practice full-stack architecture design
+- Implement authentication and ownership systems
+- Understand frontend-backend integration
+- Learn deployment workflows
+- Build a production-style portfolio project  
 
 # 👨‍💻 Author
 Farheen Mulla

@@ -68,7 +68,7 @@ FINDIT-PROJECT/
 ![Landing Page](./lost-found-react/screenshots/landing.png)
 ![Submit Page](./lost-found-react/screenshots/submit.png)
 ![Items Page](./lost-found-react/screenshots/items.png)
-![Login Page](./screenshots/login.png)
+![Login Page](./lost-found-react/screenshots/login.png)
 
 ## How to Run Locally
 

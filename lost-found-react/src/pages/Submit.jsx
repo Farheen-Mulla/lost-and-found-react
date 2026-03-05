@@ -21,7 +21,7 @@ export default function Submit({reloadItems, isLoggedIn, onLogout}) {
       contact:newItem.contact,
       status:newItem.status
     };
-    fetch("http://localhost:5000/api/items", {
+    fetch("https://lost-found-backend-ajdo.onrender.com/api/items", {
       method: "POST",
       headers: {"Content-Type": "application/json"
     },

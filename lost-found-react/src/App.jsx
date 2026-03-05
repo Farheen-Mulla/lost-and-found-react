@@ -94,7 +94,7 @@ function App() {
 
   // Load items from backend
   const loadItems = () => {
-    fetch("http://localhost:5000/api/items")
+    fetch("https://lost-found-backend-ajdo.onrender.com/api/items")
       .then(res => res.json())
       .then(data => setItems(data));
   };

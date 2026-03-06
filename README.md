@@ -216,13 +216,12 @@ Connected via secure API (not exposed publicly in README for security).
 
 ## 🏗 Architecture Overview
 
-Users (Browser)
-        ↓
-Vercel (React Frontend)
-        ↓
-Render (Node/Express Backend API)
-        ↓
-MongoDB Atlas (Cloud Database)
+```mermaid
+flowchart TD
+A[Users (Browser)] --> B[Vercel (React Frontend)]
+B --> C[Render (Node/Express Backend API)]
+C --> D[MongoDB Atlas (Cloud Database)]
+```
 
 This mirrors real-world production architecture used in modern SaaS applications.
 
@@ -232,18 +231,18 @@ This mirrors real-world production architecture used in modern SaaS applications
 
 FINDIT-PROJECT/
 │
-├── lost-found-react/        # Frontend (React + Vite)
-├── lost-found-backend/      # Backend (Node.js + Express, MVC)
+├── lost-found-React/        # Frontend (React + Vite)
+├── lost-found-backend/      # Backend (Node.js + Express)
 └── README.md
 
 ---
 
 ## 📸 Screenshots
 
-"Landing Page" (./lost-found-react/screenshots/landing.png)
-"Submit Page" (./lost-found-react/screenshots/submit.png)
-"Items Page" (./lost-found-react/screenshots/items.png)
-"Login Page" (./lost-found-react/screenshots/login.png)
+![Landing Page](./lost-found-react/screenshots/landing.png)
+![Submit Page](./lost-found-react/screenshots/submit.png)
+![Items Page](./lost-found-react/screenshots/items.png)
+![Login Page](./lost-found-react/screenshots/login.png)
 
 ---
 

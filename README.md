@@ -216,11 +216,14 @@ Connected via secure API (not exposed publicly in README for security).
 
 ## 🏗 Architecture Overview
 
-```mermaid
-flowchart TD
-A[Users (Browser)] --> B[Vercel (React Frontend)]
-B --> C[Render (Node/Express Backend API)]
-C --> D[MongoDB Atlas (Cloud Database)]
+```
+Users (Browser)
+        ↓
+Vercel (React Frontend)
+        ↓
+Render (Node/Express Backend API)
+        ↓
+MongoDB Atlas (Cloud Database)
 ```
 
 This mirrors real-world production architecture used in modern SaaS applications.

@@ -12,7 +12,6 @@ async (req,res) => {
     try{
        const result = await
         cloudinary.uploader.upload(req.file.path);
-
         const newItem = new Item({
             title: req.body.title,
             description: req.body.description,
@@ -23,8 +22,8 @@ async (req,res) => {
         
         await newItem.save();
 
-        res.json(newItem);
-
+        res.status(201).json(newItem);
+        
 
     }catch(error){
         console.error(error);
@@ -32,7 +31,7 @@ async (req,res) => {
     }finally{
         if(req.file){
          fs.unlink(req.file.path, (err) => {
-          if(err) console.log(err);
+          if(err) console.log("File delete error:" , err);
          });
         }   
     }

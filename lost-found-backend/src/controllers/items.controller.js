@@ -1,12 +1,12 @@
-let items = [];
+import Item from "../models/Item.js";
 
-export const getItems = (req, res) => {
-  res.json(items);
+export const getItems = async (req, res) => {
+  try{
+    const items =await
+    Item.find().sort({createdat:-1});
+    res.json(items);
+  }catch(error){
+    res.status(500).json({message:"Failed to fetch items"})
+  }
 };
 
-export const addItem = (req, res) => {
-  console.log("FROM REACT:", req.body);
-  const newItem = req.body;
-  items.push(newItem);
-  res.json({ message: "Item added", item: newItem });
-};

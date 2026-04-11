@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 const itemSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    type: String,
+    name: String,
+    desc: String,
+    status: String,
     contact: String,
     image: String
 } , {timestamp: true});

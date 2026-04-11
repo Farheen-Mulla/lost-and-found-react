@@ -93,10 +93,15 @@ function App() {
   );
 
   // Load items from backend
-  const loadItems = () => {
-    fetch("https://lost-found-backend-ajdo.onrender.com/api/items")
-      .then(res => res.json())
-      .then(data => setItems(data));
+  const loadItems = async () => {
+    try{
+      const res = await
+      fetch("https://lost-found-backend-ajdo.onrender.com/api/items");
+      const data = await res.json();
+      setItems(data);
+    }catch(err){
+      console.error("Error fetching items:",err);
+    }
   };
 
   useEffect(() => {

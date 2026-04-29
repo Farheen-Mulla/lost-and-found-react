@@ -5,7 +5,7 @@ function ItemForm(props) {
   const [desc, setDesc] = useState("");
   const [contact, setContact] = useState("");
   const [status, setStatus] = useState("lost");
-  // const [img, setImg] = useState(null);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     if (props.editingItem) {
@@ -21,12 +21,11 @@ function ItemForm(props) {
     e.preventDefault();
 
     const itemData = {
-      id: props.editingItem ? props.editingItem.id : Date.now(),
       name,
       desc,
       contact,
-       status
-      // img // will not be persisted in localStorage
+      status,
+      image 
     };
 
     if (props.editingItem && props.onUpdateItem) {
@@ -43,7 +42,7 @@ function ItemForm(props) {
     setDesc("");
     setContact("");
     setStatus("lost");
-    // setImg(null);
+    setImage(null);
   }
 
   // useEffect(() => {
@@ -92,7 +91,7 @@ function ItemForm(props) {
         required
       />
 
-      {/* <label
+       <label
         htmlFor="upload-image"
         className="inline-block px-[15px] py-[10px] bg-white text-blue-900 text-base border-[2.5px] border-[rgb(145,140,172)] rounded-lg cursor-pointer hover:bg-blue-900 hover:text-white transition-colors duration-300"
       >
@@ -104,8 +103,8 @@ function ItemForm(props) {
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(e) => setImg(e.target.files[0])}
-      /> */}
+        onChange={(e) => setImage(e.target.files[0])}
+      /> 
 
       <select
         value={status}

@@ -13,9 +13,9 @@ async (req,res) => {
        const result = await
         cloudinary.uploader.upload(req.file.path);
         const newItem = new Item({
-            title: req.body.title,
-            description: req.body.description,
-            type: req.body.type,
+            name: req.body.name,
+            desc: req.body.desc,
+            status: req.body.status,
             contact: req.body.contact,
             image: result.secure_url
         });

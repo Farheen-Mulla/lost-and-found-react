@@ -13,30 +13,34 @@ export default function Submit({reloadItems, isLoggedIn, onLogout}) {
     }
   }, [isLoggedIn, navigate]);
 
-  const handleAddAndRedirect = (newItem) => {
-    const payload = {
-      id:newItem.id,
-      name:newItem.name,
-      desc:newItem.desc,
-      contact:newItem.contact,
-      status:newItem.status
-    };
-    fetch("https://lost-found-backend-ajdo.onrender.com/api/items", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(res => res.json())
-  .then(data => {console.log("Response from backend:", data);
-    reloadItems(); // Refresh the list after adding
-    alert("Item submitted successfully!");
-    navigate("/items")
-  })
-  .catch(err => {
+  const handleAddAndRedirect = async (newItem) => {
+    try{
+       const formData = new FormData();
+
+       formData.append("name",newItem.name);
+       formData.append("desc",newItem.desc);
+       formData.append("contact",newItem.contact);
+       formData.append("status",newItem.status);
+       formData.append("image",newItem.image);
+
+       const res = await fetch("https://lost-found-backend-ajdo.onrender.com/api/upload", 
+        {
+          method: "POST",
+          body: formData
+        }
+       );
+
+       const data = await res.json();
+       console.log("response from backend:", data);
+       
+     
+       reloadItems(); // Refresh the list after adding
+       alert("Item submitted successfully!");
+       navigate("/items");
+  }catch(err) {
     console.error("Failed to submit:", err);
     alert("Failed to submit item. Check console.");
-  });
+  }
 };
 
   return (

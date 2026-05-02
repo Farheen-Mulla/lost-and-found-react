@@ -18,16 +18,16 @@ export default function Items({
 
   // Filter items based on search query and status
   const filteredItems = items.filter(item => {
-    const matchesQuery =
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.status.toLowerCase().includes(searchQuery.toLowerCase());
+  const matchesQuery =
+    (item.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (item.desc || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (item.status || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus =
-      searchStatus === "all" || item.status === searchStatus;
+  const matchesStatus =
+    searchStatus === "all" || item.status === searchStatus;
 
-    return matchesQuery && matchesStatus;
-  });
+  return matchesQuery && matchesStatus;
+});
 
   // Called when user clicks Edit button
   function handleEdit(item) {

@@ -5,6 +5,6 @@ const itemSchema = new mongoose.Schema({
     status: String,
     contact: String,
     image: String
-} , {timestamp: true});
+} , {timestamps: true});
 
 export default mongoose.model("Item",itemSchema);

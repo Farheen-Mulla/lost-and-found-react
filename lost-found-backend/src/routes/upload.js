@@ -5,36 +5,46 @@ import fs from "fs";
 import Item from "../models/Item.js";
 
 const router = express.Router();
-const storage = multer.diskStorage({});
+const storage = multer.diskStorage({
+  destination; "uploads/",
+  filename: (req, file, cb) => {
+    cb(null, date.now() + "-" + file.originalname);
+  }
+});
 const upload = multer({ storage });
-router.post("/upload", upload.single("image"),
-async (req,res) => {
-    try{
-       const result = await
-        cloudinary.uploader.upload(req.file.path);
-        const newItem = new Item({
-            name: req.body.name,
-            desc: req.body.desc,
-            status: req.body.status,
-            contact: req.body.contact,
-            image: result.secure_url
-        });
-        
-        await newItem.save();
+router.post("/upload", upload.single("image"), async (req, res) => {
+  try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
 
-        res.status(201).json(newItem);
-        
-
-    }catch(error){
-        console.error(error);
-        res.status(500).json({message:"Upload failed"});
-    }finally{
-        if(req.file){
-         fs.unlink(req.file.path, (err) => {
-          if(err) console.log("File delete error:" , err);
-         });
-        }   
+    if (!req.file) {
+      return res.status(400).json({ message: "No image uploaded" });
     }
+
+    const result = await cloudinary.uploader.upload(req.file.path);
+
+    const newItem = new Item({
+      name: req.body.name,
+      desc: req.body.desc,
+      status: req.body.status,
+      contact: req.body.contact,
+      image: result.secure_url
+    });
+
+    await newItem.save();
+
+    res.status(201).json(newItem);
+
+  } catch (error) {
+    console.error("UPLOAD ERROR:", error);
+    res.status(500).json({ message: "Upload failed" });
+  } finally {
+    if (req.file) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.log("File delete error:", err);
+      });
+    }
+  }
 });
 
 export default router;

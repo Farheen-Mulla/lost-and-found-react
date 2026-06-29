@@ -109,6 +109,25 @@ function App() {
   }
 };
 
+const handleDeleteItem = async(id) => {
+  try{
+    const res = await fetch(
+      `https://lost-found-backend-ajdo.onrender.com/api/items/${id}`,
+      {
+        method:"DELETE",
+      }
+    );
+    if(!res.ok){
+      throw new Error("Failed to delete item");
+    }
+    await loadItems();
+  }catch(err){
+    console.error(err);
+    alert("Failed to delete item.")
+  }
+};
+
+
   useEffect(() => {
     loadItems();
   }, []);
@@ -145,6 +164,7 @@ function App() {
         element={
           <Items 
             items={items}
+            onDeleteItem={handleDeleteItem}
             isLoggedIn={isLoggedIn}
             onLogout={handleLogout}
           />

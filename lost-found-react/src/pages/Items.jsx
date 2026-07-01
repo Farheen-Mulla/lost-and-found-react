@@ -77,7 +77,7 @@ export default function Items({
         </div>
       )}
 
-      {/* Show all items */}
+      {/* Show All items */}
       <ItemList
         items={filteredItems}
         onDeleteItem={onDeleteItem}

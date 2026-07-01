@@ -127,6 +127,32 @@ const handleDeleteItem = async(id) => {
   }
 };
 
+const handleUpdateItem = async(updatedItem) => {
+  try{
+    const res = await fetch(
+      `https://lost-found-backend-ajdo.onrender.com/api/items/${updatedItem._id}`,
+      {
+        method:"PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body:
+        JSON.stringify(updatedItem),
+      }
+    );
+    if(!res.ok){
+      throw new Error("Failed to update item");
+    }
+    await loadItems();
+  }catch(err){
+    console.error(err);
+    alert("Failed to update item.")
+  }
+};
+
+
+
+
 
   useEffect(() => {
     loadItems();
@@ -165,6 +191,7 @@ const handleDeleteItem = async(id) => {
           <Items 
             items={items}
             onDeleteItem={handleDeleteItem}
+            onUpdateItem={handleUpdateItem}
             isLoggedIn={isLoggedIn}
             onLogout={handleLogout}
           />

@@ -21,6 +21,7 @@ function ItemForm(props) {
     e.preventDefault();
 
     const itemData = {
+      _id:props.editingItem?._id,
       name,
       desc,
       contact,

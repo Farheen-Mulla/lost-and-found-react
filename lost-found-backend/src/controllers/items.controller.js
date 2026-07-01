@@ -23,3 +23,24 @@ export const deleteItem = async (req,res) => {
     });
   }
 };
+
+export const updateItem = async (req,res) => {
+  try{
+    const updatedItem = await
+    Item.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true}
+    );
+    if(!updatedItem){
+      return
+      res.status(404).json({ message:
+        "Item not found"});
+    }
+    res.json(updatedItem);
+  } catch(error){
+    res.status(500).json({
+      message: "Failed to update item"
+    });
+  }
+};

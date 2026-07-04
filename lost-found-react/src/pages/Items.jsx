@@ -26,7 +26,7 @@ export default function Items({
   const matchesStatus =
     searchStatus === "all" || item.status === searchStatus;
 
-    console.log(filteredItems);
+    //console.log(filteredItems);
 
   return matchesQuery && matchesStatus;
 });

@@ -1,5 +1,13 @@
 # Lost & Found Web App 🧭
 
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=black)
+
 Full-Stack Cloud-Deployed Web Application
 
 Lost & Found is a fully deployed full-stack web application that allows users to report lost or found items, browse listings, and manage submissions.
@@ -22,7 +30,7 @@ This project evolved from a frontend-only MVP into a fully integrated cloud-base
 👉 https://lost-and-found-react.vercel.app/
 
 ### Backend (Render):
-Connected via secure API (not exposed publicly in README for security).
+https://lost-found-backend-ajdo.onrender.com
 
 ---
 
@@ -33,6 +41,11 @@ Connected via secure API (not exposed publicly in README for security).
 - Responsive landing page
 - Submit lost/found items
 - View all submitted items
+- Upload item images(Cloudinary)
+- Edit existing items
+- Delete items
+- Search items by keyword
+- Filter items by Lost/Found status
 - Persistent database storage (MongoDB Atlas)
 - Real backend API integration
 - Cloud deployment (Frontend + Backend)
@@ -49,8 +62,7 @@ Connected via secure API (not exposed publicly in README for security).
 - JWT Authentication
 - User accounts
 - Ownership-based item control
-- Image upload (Cloudinary integration)
-- Advanced search & filtering
+- Advanced search & filtering improvements 
 - Pagination
 - Loading states & better UX feedback
 
@@ -72,6 +84,8 @@ Connected via secure API (not exposed publicly in README for security).
 - Express.js
 - MongoDB Atlas
 - Mongoose
+- Multer
+- Cloudinary
 - CORS
 - dotenv
 
@@ -80,6 +94,8 @@ Connected via secure API (not exposed publicly in README for security).
 - Vercel (Frontend Hosting)
 - Render (Backend Hosting)
 - MongoDB Atlas (Cloud Database)
+- Cloudinary (Image Storage)
+
 
 ---
 
@@ -134,6 +150,10 @@ No secrets are committed to GitHub.
 - Persistent data storage (MongoDB Atlas)
 - Cloud-hosted backend API
 - Fully deployed frontend
+- Image upload and storage (cloudinary)
+- Edit existing items
+- Delete items
+- Search and filter items
 - Production-ready configuration
 - Clean commit history
 - MVC backend structure
@@ -159,10 +179,9 @@ No secrets are committed to GitHub.
 - Render deployment
 - Full frontend-backend integration
 
-### 🔜 Phase 3 – Feature Expansion
+### 🔜 Phase 3 – Feature Enhancements
 
 - JWT Authentication
-- Image storage (Cloudinary)
 - Authorization middleware
 - Production-level validation
 - UI/UX improvements
@@ -186,8 +205,7 @@ This project was built to:
 ## 👨‍💻 Author
 
 Farheen Mulla
-Full-Stack Developer (in progress)
-
+Aspiring Full-Stack Developer 
 LinkedIn:
 https://www.linkedin.com/in/farheen-mulla-413335335/
 

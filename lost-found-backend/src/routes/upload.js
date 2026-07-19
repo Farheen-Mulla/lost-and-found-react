@@ -3,6 +3,7 @@ import multer from "multer";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 import Item from "../models/Item.js";
+import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -12,7 +13,7 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage });
-router.post("/upload", upload.single("image"), async (req, res) => {
+router.post("/upload", protect, upload.single("image"), async (req, res) => {
   try {
     console.log("BODY:", req.body);
     console.log("FILE:", req.file);

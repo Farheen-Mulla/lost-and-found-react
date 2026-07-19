@@ -6,12 +6,43 @@ export default function Login({onLogin}) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
-    e.preventDefault();
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch(
+      "https://lost-found-backend-ajdo.onrender.com/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message);
+    }
+
+    localStorage.setItem("token", data.token);
+
     onLogin();
+
     alert("Login Successful!");
+
     navigate("/items");
-  };
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
   return (
     <PublicLayout>
       <div className="flex justify-center items-center min-h-[70vh]">

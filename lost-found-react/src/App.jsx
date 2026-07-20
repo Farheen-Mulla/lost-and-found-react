@@ -85,6 +85,7 @@ import Landing from "./pages/Landing";
 import Submit from "./pages/Submit";
 import Items from "./pages/Items";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -153,7 +154,6 @@ const handleUpdateItem = async(updatedItem) => {
 
 
 
-
   useEffect(() => {
     loadItems();
   }, []);
@@ -173,6 +173,9 @@ const handleUpdateItem = async(updatedItem) => {
       <Route path="/" element={<Landing />} />
 
       <Route path="/login" element={<Login onLogin={handleLogin} />} />
+      <Route path="/register" element={<Register />} />
+      
+
 
       <Route 
         path="/submit" 

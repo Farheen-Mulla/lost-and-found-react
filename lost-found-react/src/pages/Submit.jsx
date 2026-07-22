@@ -23,10 +23,17 @@ export default function Submit({reloadItems, isLoggedIn, onLogout}) {
        formData.append("status",newItem.status);
        formData.append("image",newItem.image);
 
-       const res = await fetch("https://lost-found-backend-ajdo.onrender.com/api/upload", 
+       const token = 
+       localStorage.getItem("token");
+
+       const res = await fetch(
+        "https://lost-found-backend-ajdo.onrender.com/api/upload",
         {
           method: "POST",
-          body: formData
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
         }
        );
 

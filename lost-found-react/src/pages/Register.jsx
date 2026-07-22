@@ -36,7 +36,12 @@ export default function Register() {
     alert("Registration Successful!");
     navigate("/login");
   } catch (error) {
-    alert(error.message);
+    //alert(error.message);
+    console.log(error.message);
+
+    res.status(500).json({
+      message: "Registration failed"
+    });
   }
 };
 

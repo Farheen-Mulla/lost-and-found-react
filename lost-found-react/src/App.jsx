@@ -135,12 +135,15 @@ const handleDeleteItem = async(id) => {
 
 const handleUpdateItem = async(updatedItem) => {
   try{
+    const token =localStorage.getItem("token");
+
     const res = await fetch(
       `https://lost-found-backend-ajdo.onrender.com/api/items/${updatedItem._id}`,
       {
         method:"PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body:
         JSON.stringify(updatedItem),

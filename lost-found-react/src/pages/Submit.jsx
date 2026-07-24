@@ -40,10 +40,14 @@ export default function Submit({reloadItems, isLoggedIn, onLogout}) {
        const data = await res.json();
        console.log("response from backend:", data);
        
+       if(!res.ok){
+        throw new Error(data.message || "Failed to submit item");
+       }
      
-       reloadItems(); // Refresh the list after adding
+       await reloadItems(); // Refresh the list after adding
        alert("Item submitted successfully!");
        navigate("/items");
+       
   }catch(err) {
     console.error("Failed to submit:", err);
     alert("Failed to submit item. Check console.");

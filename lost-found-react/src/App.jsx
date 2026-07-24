@@ -112,10 +112,15 @@ function App() {
 
 const handleDeleteItem = async(id) => {
   try{
+    const token = localStorage.getItem("token");
+
     const res = await fetch(
       `https://lost-found-backend-ajdo.onrender.com/api/items/${id}`,
       {
         method:"DELETE",
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     if(!res.ok){

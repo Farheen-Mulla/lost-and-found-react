@@ -1,4 +1,6 @@
 import Item from "../models/Item.js";
+import cloudinary from "../config/cloudinary.js";
+import fs from "fs";
 
 export const getItems = async (req, res) => {
   try{
@@ -31,25 +33,43 @@ export const deleteItem = async (req,res) => {
   }
 };
 
-export const updateItem = async (req,res) => {
-  try{
-    const updatedItem = await
-    Item.findByIdAndUpdate(
+export const updateItem = async (req, res) => {
+  try {
+    const updateData = {
+      name: req.body.name,
+      desc: req.body.desc,
+      contact: req.body.contact,
+      status: req.body.status,
+    };
+
+    // Only update image if a new one was uploaded
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      updateData.image = result.secure_url;
+
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.log(err);
+      });
+    }
+
+    const updatedItem = await Item.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      {new: true}
+      updateData,
+      { new: true }
     );
 
-    if(!updatedItem){
+    if (!updatedItem) {
       return res.status(404).json({
-         message: "Item not found"
-        });
+        message: "Item not found",
+      });
     }
-    
+
     res.json(updatedItem);
-  } catch(error){
+
+  } catch (error) {
+    console.error(error);
     res.status(500).json({
-      message: "Failed to update item"
+      message: "Failed to update item",
     });
   }
 };

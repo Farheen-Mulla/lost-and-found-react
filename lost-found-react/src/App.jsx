@@ -133,29 +133,40 @@ const handleDeleteItem = async(id) => {
   }
 };
 
-const handleUpdateItem = async(updatedItem) => {
-  try{
-    const token =localStorage.getItem("token");
+const handleUpdateItem = async (updatedItem) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("name", updatedItem.name);
+    formData.append("desc", updatedItem.desc);
+    formData.append("contact", updatedItem.contact);
+    formData.append("status", updatedItem.status);
+
+    // Only send image if user selected a new one
+    if (updatedItem.image) {
+      formData.append("image", updatedItem.image);
+    }
 
     const res = await fetch(
       `https://lost-found-backend-ajdo.onrender.com/api/items/${updatedItem._id}`,
       {
-        method:"PUT",
+        method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body:
-        JSON.stringify(updatedItem),
+        body: formData,
       }
     );
-    if(!res.ok){
+
+    if (!res.ok) {
       throw new Error("Failed to update item");
     }
+
     await loadItems();
-  }catch(err){
+  } catch (err) {
     console.error(err);
-    alert("Failed to update item.")
+    alert("Failed to update item.");
   }
 };
 

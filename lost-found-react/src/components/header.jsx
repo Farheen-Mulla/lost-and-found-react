@@ -1,12 +1,40 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import SearchBar from './searchbar.jsx';
 function Header({searchQuery , onSearchChange , searchStatus , onStatusChange , isLoggedIn , onLogout}) {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [showMenu, setShowMenu] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const userName = localStorage.getItem("userName");
+
     const handleLogoutClick = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userId");
+
         onLogout();
         alert("Logged out successfully!");
         navigate("/");
     };
+    useEffect(() => {
+  function handleClickOutside(event) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target)
+    ) {
+      setShowMenu(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
     return (
   <div className="bg-[#1a3a8a] text-white px-10 py-2 flex items-center shadow-lg">
 
@@ -36,12 +64,34 @@ function Header({searchQuery , onSearchChange , searchStatus , onStatusChange , 
       )}
 
       {isLoggedIn ? (
-        <button onClick={handleLogoutClick} className="bg-red-500 px-4 py-1 rounded-lg">
+  <div className="relative" ref={dropdownRef}>
+    <button
+      onClick={() => setShowMenu(!showMenu)}
+      className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white hover:text-[#1a3a8a]"
+    >
+      <div className="w-8 h-8 rounded-full bg-white text-[#1a3a8a] flex items-center justify-center font-bold">
+        {userName?.charAt(0).toUpperCase()}
+      </div>
+
+      <span>{userName}</span>
+
+      <span className={`transition-transform duration-200 ${ showMenu ? "rotate-180" : "" }`} > ▼ </span>
+    </button>
+
+    {showMenu && (
+      <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg overflow-hidden">
+        <button
+          onClick={handleLogoutClick}
+          className="w-full text-left px-4 py-2 hover:bg-red-100"
+        >
           Logout
         </button>
-      ) : (
-        <Link to="/login">Login</Link>
-      )}
+      </div>
+    )}
+  </div>
+) : (
+  <Link to="/login">Login</Link>
+)}
     </div>
   </div>
 );

@@ -29,7 +29,8 @@ router.post("/upload", protect, upload.single("image"), async (req, res) => {
       desc: req.body.desc,
       status: req.body.status,
       contact: req.body.contact,
-      image: result.secure_url
+      image: result.secure_url,
+      user: req.user.userId,
     });
 
     await newItem.save();

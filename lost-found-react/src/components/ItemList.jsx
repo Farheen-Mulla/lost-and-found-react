@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 function ItemList({ items, onDeleteItem, onEditItem }) {
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
+    const loggedInUserId = localStorage.getItem("userId");
+
     const toggleMenu = (index) => {
         setOpenMenuIndex(openMenuIndex === index ? null : index);
     };
@@ -13,12 +15,15 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
             {items.length === 0 ? (
                 <p className="text-center text-gray-600 text-xl mt-10">No items to display</p>
             ) : (
-                items.map((item, index) => (
-                    <div key={item._id} className="relative min-h-[6rem] w-full bg-white p-4 rounded-lg shadow-[0_2px_6px_rgba(0,0,0,0.35)] my-4 flex flex-col"> 
-                        
-                        <div className="flex justify-between items-start">
-                            <h3 className="text-2xl font-bold">{item.name}</h3>
-                            <div className="relative">
+                items.map((item, index) => {
+                    const isOwner = item.user === loggedInUserId;
+                    return (
+                        <div key={item._id} className="relative min-h-[6rem] w-full bg-white p-4 rounded-lg shadow-[0_2px_6px_rgba(0,0,0,0.35)] my-4 flex flex-col"> 
+                            
+                            <div className="flex justify-between items-start">
+                                <h3 className="text-2xl font-bold">{item.name}</h3>
+                            {isOwner && (
+                                <div className="relative">
                                 <button 
                                     onClick={() => toggleMenu(index)}
                                     className="text-2xl font-bold p-1 px-3 hover:bg-gray-100 rounded-full">
@@ -39,6 +44,7 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
                                     </div>
                                 )}
                             </div>
+                            )}
                         </div>
 
                         {item.image && (
@@ -57,7 +63,8 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
                             </span>
                         </div>
                     </div>  
-                ))
+                );
+            })
             )}
         </div>
     );

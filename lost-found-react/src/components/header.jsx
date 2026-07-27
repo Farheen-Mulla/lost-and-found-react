@@ -51,7 +51,7 @@ function Header({searchQuery , onSearchChange , searchStatus , onStatusChange , 
       />
     </div>
 
-    <div className="w-1/4 flex justify-end items-center space-x-6 text-lg font-medium border-l-2 border-gray-300 pl-6">
+    <div className="w-1/4 flex justify-end items-center space-x-6 text-lg font-medium pl-6">
 
       <Link className="px-4 py-2 rounded-lg hover:bg-white hover:text-[#1a3a8a]" to="/">Home</Link>
 

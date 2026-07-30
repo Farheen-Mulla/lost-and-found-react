@@ -1,11 +1,12 @@
 import express from "express";
 import multer from "multer";
 import fs from "fs";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
+// Same temp-storage pattern as your other upload routes
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
@@ -14,16 +15,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-function fileToGenerativePart(path, mimeType) {
-  return {
-    inlineData: {
-      data: Buffer.from(fs.readFileSync(path)).toString("base64"),
-      mimeType,
-    },
-  };
-}
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 router.post("/ai/describe", protect, upload.single("image"), async (req, res) => {
   try {
@@ -31,17 +23,33 @@ router.post("/ai/describe", protect, upload.single("image"), async (req, res) =>
       return res.status(400).json({ message: "No image uploaded" });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const imagePart = fileToGenerativePart(req.file.path, req.file.mimetype);
+    const base64Image = fs.readFileSync(req.file.path).toString("base64");
 
     const prompt = `You are helping fill out a lost-and-found item report.
 Look at this image and respond with ONLY valid JSON in this exact format, nothing else:
 {"name": "short item name (2-5 words)", "desc": "one sentence description mentioning color, brand, and any distinguishing features you can see"}`;
 
-    const result = await model.generateContent([prompt, imagePart]);
-    const text = result.response.text();
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash-lite",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: prompt },
+            {
+              inlineData: {
+                mimeType: req.file.mimetype,
+                data: base64Image,
+              },
+            },
+          ],
+        },
+      ],
+    });
 
+    const text = response.text;
+
+    // Clean up in case the model wraps the JSON in ```json fences
     const cleaned = text.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(cleaned);
 
@@ -53,6 +61,7 @@ Look at this image and respond with ONLY valid JSON in this exact format, nothin
     console.error("AI describe error:", error);
     res.status(500).json({ message: "Failed to generate description" });
   } finally {
+    // Clean up the temp file, same as your other routes
     if (req.file) {
       fs.unlink(req.file.path, (err) => {
         if (err) console.log("File delete error:", err);

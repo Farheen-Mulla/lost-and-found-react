@@ -7,6 +7,8 @@ function ItemForm(props) {
   const [status, setStatus] = useState("lost");
   const [image, setImage] = useState(null);
 
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
   useEffect(() => {
     if (props.editingItem) {
       setName(props.editingItem.name);
@@ -16,17 +18,56 @@ function ItemForm(props) {
     }
   }, [props.editingItem]);
 
+  async function handleImageChange(e) {
+    const file = e.target.files[0];
+    setImage(file);
+
+    if (!file) return;
+
+    setIsAnalyzing(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await fetch(
+        "https://lost-found-backend-ajdo.onrender.com/api/ai/describe",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("AI description failed");
+      }
+
+      const data = await res.json();
+
+      if (!name) setName(data.name);
+      if (!desc) setDesc(data.desc);
+    } catch (err) {
+      console.error("AI describe error:", err);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }
+
   function handleSubmit(e) {
     console.log("Form Submitted");
     e.preventDefault();
 
     const itemData = {
-      _id:props.editingItem?._id,
+      _id: props.editingItem?._id,
       name,
       desc,
       contact,
       status,
-      image 
+      image,
     };
 
     if (props.editingItem && props.onUpdateItem) {
@@ -46,16 +87,6 @@ function ItemForm(props) {
     setImage(null);
   }
 
-  // useEffect(() => {
-  //   if (props.editingItem) {
-  //     setName(props.editingItem.name);
-  //     setDesc(props.editingItem.desc);
-  //     setContact(props.editingItem.contact);
-  //     setStatus(props.editingItem.status);
-  //     setImg(props.editingItem.img || null);
-  //   }
-  // }, [props.editingItem]);
-
   return (
     <form
       className="bg-[#b4cbf0] p-8 rounded-xl flex flex-col w-full max-w-sm shadow-sm"
@@ -64,6 +95,27 @@ function ItemForm(props) {
       <h2 className="text-[#3b8bf6] text-2xl font-semibold self-start mb-2">
         Fill Item Information:
       </h2>
+
+      <label
+        htmlFor="upload-image"
+        className="inline-block px-[15px] py-[10px] bg-white text-blue-900 text-base border-[2.5px] border-[rgb(145,140,172)] rounded-lg cursor-pointer hover:bg-blue-900 hover:text-white transition-colors duration-300"
+      >
+        Upload Image
+      </label>
+
+      <input
+        id="upload-image"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleImageChange}
+      />
+
+      {isAnalyzing && (
+        <p className="text-sm text-blue-700 italic my-1">
+          Analyzing image, filling in details...
+        </p>
+      )}
 
       <input
         type="text"
@@ -91,21 +143,6 @@ function ItemForm(props) {
         className="bg-white w-full border-[2.5px] border-[rgb(161,154,200)] text-base h-10 pl-2 my-2 rounded-lg"
         required
       />
-
-       <label
-        htmlFor="upload-image"
-        className="inline-block px-[15px] py-[10px] bg-white text-blue-900 text-base border-[2.5px] border-[rgb(145,140,172)] rounded-lg cursor-pointer hover:bg-blue-900 hover:text-white transition-colors duration-300"
-      >
-        Upload Image
-      </label>
-
-      <input
-        id="upload-image"
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => setImage(e.target.files[0])}
-      /> 
 
       <select
         value={status}

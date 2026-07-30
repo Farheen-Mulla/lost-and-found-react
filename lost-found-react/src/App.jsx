@@ -110,7 +110,7 @@ function App() {
   }
 };
 
-const handleDeleteItem = async(id) => {
+/*const handleDeleteItem = async(id) => {
   try{
     const token = localStorage.getItem("token");
 
@@ -130,6 +130,37 @@ const handleDeleteItem = async(id) => {
   }catch(err){
     console.error(err);
     alert("Failed to delete item.")
+  }
+};*/
+
+const handleDeleteItem = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    console.log("Delete Token:", token);
+
+    const res = await fetch(
+      `https://lost-found-backend-ajdo.onrender.com/api/items/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("Delete Status:", res.status);
+
+    if (!res.ok) {
+      const data = await res.json();
+      console.log("Delete Error:", data);
+      throw new Error(data.message);
+    }
+
+    await loadItems();
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
   }
 };
 

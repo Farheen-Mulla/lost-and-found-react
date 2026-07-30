@@ -5,8 +5,10 @@ import dotenv from "dotenv";
 import itemsRoutes from "./routes/items.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import uploadRoutes from "./routes/upload.js";
+import aiRoutes from "./routes/ai.routes.js";
 
-dotenv.config(); // Load .env variables
+
+dotenv.config(); 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,6 +19,7 @@ app.use(express.json());
 app.use("/api", itemsRoutes);
 app.use("/api", uploadRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api", aiRoutes);
 
 //  MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)

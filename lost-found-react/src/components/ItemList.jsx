@@ -4,9 +4,45 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
     const loggedInUserId = localStorage.getItem("userId");
 
+    const [openMatchesId, setOpenMatchesId] = useState(null);
+    const [matchesById, setMatchesById] = useState({});
+    const [loadingMatchesId, setLoadingMatchesId] = useState(null);
+
     const toggleMenu = (index) => {
         setOpenMenuIndex(openMenuIndex === index ? null : index);
     };
+
+    async function handleFindMatches(itemId) {
+        if (openMatchesId === itemId) {
+            setOpenMatchesId(null);
+            return;
+        }
+
+        setOpenMatchesId(itemId);
+
+        if (matchesById[itemId]) return;
+
+        setLoadingMatchesId(itemId);
+
+        try {
+            const res = await fetch(
+                `https://lost-found-backend-ajdo.onrender.com/api/items/${itemId}/matches`
+            );
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch matches");
+            }
+
+            const data = await res.json();
+            setMatchesById((prev) => ({ ...prev, [itemId]: data }));
+        } catch (err) {
+            console.error("Find matches error:", err);
+            setMatchesById((prev) => ({ ...prev, [itemId]: [] }));
+        } finally {
+            setLoadingMatchesId(null);
+        }
+    }
+
     console.log("Items in ItemList:", items);
     return (
         <div className="p-4 bg-[#b4cbf0] h-[30rem] overflow-y-auto w-[50rem] border-4 border-[#1e3985] rounded-lg">
@@ -62,6 +98,52 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
                                 {item.status}
                             </span>
                         </div>
+
+                        <button
+                            onClick={() => handleFindMatches(item._id)}
+                            className="mt-3 self-start px-4 py-2 bg-[#1a3a8a] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+                        >
+                            {openMatchesId === item._id ? "Hide Matches" : "🔍 Find Possible Matches"}
+                        </button>
+
+                        {openMatchesId === item._id && (
+                            <div className="mt-3 border-t pt-3">
+                                {loadingMatchesId === item._id ? (
+                                    <p className="text-gray-500 italic">Searching for matches...</p>
+                                ) : matchesById[item._id]?.length > 0 ? (
+                                    <div className="flex flex-col gap-3">
+                                        {matchesById[item._id].map((match) => (
+                                            <div
+                                                key={match._id}
+                                                className="flex gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200"
+                                            >
+                                                {match.image && (
+                                                    <img
+                                                        src={match.image}
+                                                        alt={match.name}
+                                                        className="w-16 h-16 object-cover rounded-lg"
+                                                    />
+                                                )}
+                                                <div className="flex-1">
+                                                    <div className="flex justify-between items-center">
+                                                        <h4 className="font-bold">{match.name}</h4>
+                                                        <span className="text-xs text-gray-500">
+                                                            {Math.round(match.matchScore * 100)}% match
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-600">{match.desc}</p>
+                                                    <p className="text-sm text-gray-500 mt-1">
+                                                        Contact: {match.contact}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-500 italic">No possible matches found yet.</p>
+                                )}
+                            </div>
+                        )}
                     </div>  
                 );
             })

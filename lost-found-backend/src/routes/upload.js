@@ -4,6 +4,7 @@ import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 import Item from "../models/Item.js";
 import { protect } from "../middleware/auth.middleware.js";
+import { generateEmbedding } from "../utils/embedding.js";
 
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -24,6 +25,13 @@ router.post("/upload", protect, upload.single("image"), async (req, res) => {
 
     const result = await cloudinary.uploader.upload(req.file.path);
 
+    let embedding = [];
+    try {
+      embedding = await generateEmbedding(`${req.body.name}. ${req.body.desc}`);
+    } catch (embedError) {
+      console.error("Embedding generation failed:", embedError);
+    }
+
     const newItem = new Item({
       name: req.body.name,
       desc: req.body.desc,
@@ -31,6 +39,7 @@ router.post("/upload", protect, upload.single("image"), async (req, res) => {
       contact: req.body.contact,
       image: result.secure_url,
       user: req.user.userId,
+      embedding,
     });
 
     await newItem.save();
@@ -50,4 +59,3 @@ router.post("/upload", protect, upload.single("image"), async (req, res) => {
 });
 
 export default router;
-    

@@ -25,6 +25,13 @@ const itemSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    // NEW: stores the AI-generated embedding (a list of numbers)
+    // representing the meaning of this item's name + description.
+    // Used to find similar lost/found items automatically.
+    embedding: {
+        type: [Number],
+        default: [],
+    },
 } , {timestamps: true});
 
 export default mongoose.model("Item",itemSchema);

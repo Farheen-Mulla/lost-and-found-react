@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import ItemList from "../components/ItemList";
@@ -16,24 +16,46 @@ export default function Items({
   const [searchStatus, setSearchStatus] = useState("all");
   const navigate = useNavigate();
 
-  // Filter items based on search query and status
-  const filteredItems = items.filter(item => {
-  const matchesQuery =
-    (item.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (item.desc || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (item.status || "").toLowerCase().includes(searchQuery.toLowerCase());
+  const [searchResults, setSearchResults] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
 
-  const matchesStatus =
-    searchStatus === "all" || item.status === searchStatus;
+  useEffect(() => {
+    if (searchQuery.trim() === "" && searchStatus === "all") {
+      setSearchResults(null);
+      return;
+    }
 
-    //console.log(filteredItems);
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const params = new URLSearchParams();
+        if (searchQuery.trim()) params.append("q", searchQuery.trim());
+        if (searchStatus !== "all") params.append("status", searchStatus);
 
-  return matchesQuery && matchesStatus;
-});
+        const res = await fetch(
+          `https://lost-found-backend-ajdo.onrender.com/api/items/search?${params.toString()}`
+        );
 
-  // Called when user clicks Edit button
+        if (!res.ok) throw new Error("Search failed");
+
+        const data = await res.json();
+        setSearchResults(data);
+      } catch (err) {
+        console.error("Search error:", err);
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 400); 
+
+    
+    return () => clearTimeout(timer);
+  }, [searchQuery, searchStatus]);
+
+  const displayedItems = searchResults !== null ? searchResults : items;
+
   function handleEdit(item) {
-    if(!isLoggedIn){
+    if (!isLoggedIn) {
       alert("Please log in to edit items.");
       navigate("/login");
       return;
@@ -41,21 +63,20 @@ export default function Items({
     setEditingItem(item);
   }
 
-  // Called after updating an item in ItemForm
   function handleUpdate(updatedItem) {
     onUpdateItem(updatedItem);
-    setEditingItem(null); // Close edit mode
+    setEditingItem(null);
   }
 
-  const handleSearchAttempt =(value) => {
-   if(!isLoggedIn){
-    if(value !== ""){
-     alert("Please log in to search items.");
-     navigate("/login");
+  const handleSearchAttempt = (value) => {
+    if (!isLoggedIn) {
+      if (value !== "") {
+        alert("Please log in to search items.");
+        navigate("/login");
+      }
+      return;
     }
-    return;
-   }
-   setSearchQuery(value);
+    setSearchQuery(value);
   };
 
   return (
@@ -67,24 +88,26 @@ export default function Items({
       isLoggedIn={isLoggedIn}
       onLogout={onLogout}
     >
-      {/* ItemForm for editing items */}
       <div className="flex flex-col items-center gap-8 py-10 min-h-screen">
 
-      {editingItem && (
-        <div className="w-full flex justify-center">
-          <ItemForm
-          editingItem={editingItem}
-          onUpdateItem={handleUpdate}
-          />
-        </div>
-      )}
+        {editingItem && (
+          <div className="w-full flex justify-center">
+            <ItemForm
+              editingItem={editingItem}
+              onUpdateItem={handleUpdate}
+            />
+          </div>
+        )}
 
-      {/* Show All items */}
-      <ItemList
-        items={filteredItems}
-        onDeleteItem={onDeleteItem}
-        onEditItem={handleEdit}
-      />
+        {isSearching && (
+          <p className="text-blue-700 italic">Searching...</p>
+        )}
+
+        <ItemList
+          items={displayedItems}
+          onDeleteItem={onDeleteItem}
+          onEditItem={handleEdit}
+        />
       </div>
     </AppLayout>
   );

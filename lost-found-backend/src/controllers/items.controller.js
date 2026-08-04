@@ -66,6 +66,7 @@ export const updateItem = async (req, res) => {
 
     res.json(updatedItem);
 
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -93,6 +94,7 @@ export const getMatches = async (req, res) => {
       status: oppositeStatus,
       embedding: { $exists: true, $ne: [] },
     });
+
 
     const scored = candidates.map((candidate) => ({
       item: candidate,
@@ -139,9 +141,12 @@ export const searchItems = async (req, res) => {
       score: cosineSimilarity(queryEmbedding, candidate.embedding),
     }));
 
-    scored.sort((a, b) => b.score - a.score);
+    const SIMILARITY_THRESHOLD = 0.5;
+    const relevant = scored.filter((entry) => entry.score >= SIMILARITY_THRESHOLD);
 
-    const results = scored.map((entry) => ({
+    relevant.sort((a, b) => b.score - a.score);
+
+    const results = relevant.map((entry) => ({
       ...entry.item.toObject(),
       matchScore: entry.score,
     }));

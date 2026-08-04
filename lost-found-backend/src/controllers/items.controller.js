@@ -66,7 +66,6 @@ export const updateItem = async (req, res) => {
 
     res.json(updatedItem);
 
-    
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -95,14 +94,17 @@ export const getMatches = async (req, res) => {
       embedding: { $exists: true, $ne: [] },
     });
 
-
     const scored = candidates.map((candidate) => ({
       item: candidate,
       score: cosineSimilarity(item.embedding, candidate.embedding),
     }));
 
-    scored.sort((a, b) => b.score - a.score);
-    const topMatches = scored.slice(0, 5).map((entry) => ({
+    
+    const SIMILARITY_THRESHOLD = 0.5;
+    const relevant = scored.filter((entry) => entry.score >= SIMILARITY_THRESHOLD);
+
+    relevant.sort((a, b) => b.score - a.score);
+    const topMatches = relevant.slice(0, 5).map((entry) => ({
       ...entry.item.toObject(),
       matchScore: entry.score,
     }));
@@ -114,13 +116,12 @@ export const getMatches = async (req, res) => {
   }
 };
 
-// NEW: semantic search — embeds the search text and ranks all items
-// (optionally filtered by status) by how close their meaning is to the query
+
 export const searchItems = async (req, res) => {
   try {
     const { q, status } = req.query;
 
-    // No query text — just fall back to normal item listing
+    
     if (!q || q.trim() === "") {
       const filter = status && status !== "all" ? { status } : {};
       const items = await Item.find(filter).sort({ createdAt: -1 });

@@ -17,7 +17,7 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
     };
 
     async function handleGetVerificationQuestion(matchId) {
-        if (verificationById[matchId]) return; // already fetched
+        if (verificationById[matchId]) return;
 
         setLoadingVerificationId(matchId);
 
@@ -48,7 +48,6 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
     }
 
     async function handleFindMatches(itemId) {
-        // If already open, just close it
         if (openMatchesId === itemId) {
             setOpenMatchesId(null);
             return;
@@ -79,146 +78,164 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
         }
     }
 
-    console.log("Items in ItemList:", items);
     return (
-        <div className="p-4 bg-[#b4cbf0] h-[30rem] overflow-y-auto w-[50rem] border-4 border-[#1e3985] rounded-lg">
-            <h2 className="text-[2rem] text-blue-500 font-['Gill_Sans',...sans-serif] h-8 my-6 mt-0 pt-4 pl-4">Items List</h2>
-            
+        <div className="w-full max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl font-bold text-[#1a3a8a] mb-6">Items List</h2>
+
             {items.length === 0 ? (
-                <p className="text-center text-gray-600 text-xl mt-10">No items to display</p>
+                <div className="text-center py-20">
+                    <p className="text-gray-500 text-xl">No items to display yet.</p>
+                    <p className="text-gray-400 text-sm mt-1">Reported items will show up here.</p>
+                </div>
             ) : (
-                items.map((item, index) => {
-                    const isOwner = item.user === loggedInUserId;
-                    return (
-                        <div key={item._id} className="relative min-h-[6rem] w-full bg-white p-4 rounded-lg shadow-[0_2px_6px_rgba(0,0,0,0.35)] my-4 flex flex-col"> 
-                            
-                            <div className="flex justify-between items-start">
-                                <h3 className="text-2xl font-bold">{item.name}</h3>
-                            {isOwner && (
-                                <div className="relative">
-                                <button 
-                                    onClick={() => toggleMenu(index)}
-                                    className="text-2xl font-bold p-1 px-3 hover:bg-gray-100 rounded-full">
-                                    &#8942; 
-                                </button>
-                                {openMenuIndex === index && (
-                                    <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-300 rounded shadow-lg z-50">
-                                        <button 
-                                            onClick={() => { onEditItem(item); setOpenMenuIndex(null); }}
-                                            className="w-full text-left px-4 py-2 hover:bg-blue-100 text-blue-600 font-bold">
-                                            Edit
-                                        </button>
-                                        <button 
-                                            onClick={() => { onDeleteItem(item._id); setOpenMenuIndex(null); }}
-                                            className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 font-bold">
-                                            Delete
-                                        </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {items.map((item, index) => {
+                        const isOwner = item.user === loggedInUserId;
+                        return (
+                            <div
+                                key={item._id}
+                                className="relative bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200 border border-gray-100 p-4 flex flex-col h-full"
+                            >
+                                <div className="flex justify-between items-start gap-2">
+                                    <h3 className="text-lg font-bold text-gray-900 line-clamp-1">{item.name}</h3>
+                                    {isOwner && (
+                                        <div className="relative shrink-0">
+                                            <button
+                                                onClick={() => toggleMenu(index)}
+                                                className="text-xl font-bold p-1 px-2 hover:bg-gray-100 rounded-full leading-none"
+                                            >
+                                                &#8942;
+                                            </button>
+                                            {openMenuIndex === index && (
+                                                <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                                                    <button
+                                                        onClick={() => { onEditItem(item); setOpenMenuIndex(null); }}
+                                                        className="w-full text-left px-4 py-2 hover:bg-blue-50 text-blue-600 font-semibold text-sm"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => { onDeleteItem(item._id); setOpenMenuIndex(null); }}
+                                                        className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 font-semibold text-sm"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {item.image ? (
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className="w-full h-40 object-cover rounded-lg mt-3 mb-3"
+                                    />
+                                ) : (
+                                    <div className="w-full h-40 rounded-lg mt-3 mb-3 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+                                        No image
                                     </div>
                                 )}
-                            </div>
-                            )}
-                        </div>
 
-                        {item.image && (
-                            <img 
-                                src={item.image}
-                                alt={item.name}
-                                className="w-[150px] h-[150px] object-cover rounded-lg mb-2"
-                            />
-                        )}
-                        <p className="text-xl text-gray-700">{item.desc}</p>
-                        
-                        <div className="flex justify-between items-center w-full mt-4">
-                            <p className="text-lg">Contact: {item.contact}</p> 
-                            <span className={`px-3 py-1 rounded-xl text-[16px] text-white font-bold uppercase ${item.status==='lost' ? 'bg-red-500' : 'bg-green-500'}`}>
-                                {item.status}
-                            </span>
-                        </div>
+                                <p className="text-sm text-gray-600 line-clamp-2 flex-1">{item.desc}</p>
 
-                        <button
-                            onClick={() => handleFindMatches(item._id)}
-                            className="mt-3 self-start px-4 py-2 bg-[#1a3a8a] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
-                        >
-                            {openMatchesId === item._id ? "Hide Matches" : "🔍 Find Possible Matches"}
-                        </button>
+                                <div className="flex justify-between items-center w-full mt-4 gap-2">
+                                    <p className="text-sm text-gray-500 truncate">Contact: {item.contact}</p>
+                                    <span
+                                        className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] text-white font-bold uppercase tracking-wide ${
+                                            item.status === 'lost' ? 'bg-red-500' : 'bg-green-500'
+                                        }`}
+                                    >
+                                        {item.status}
+                                    </span>
+                                </div>
 
-                        {openMatchesId === item._id && (
-                            <div className="mt-3 border-t pt-3">
-                                {loadingMatchesId === item._id ? (
-                                    <p className="text-gray-500 italic">Searching for matches...</p>
-                                ) : matchesById[item._id]?.length > 0 ? (
-                                    <div className="flex flex-col gap-3">
-                                        {matchesById[item._id].map((match) => (
-                                            <div
-                                                key={match._id}
-                                                className="flex gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200"
-                                            >
-                                                {match.image && (
-                                                    <img
-                                                        src={match.image}
-                                                        alt={match.name}
-                                                        className="w-16 h-16 object-cover rounded-lg"
-                                                    />
-                                                )}
-                                                <div className="flex-1">
-                                                    <div className="flex justify-between items-center">
-                                                        <h4 className="font-bold">{match.name}</h4>
-                                                        <span className="text-xs text-gray-500">
-                                                            {Math.round(match.matchScore * 100)}% match
-                                                        </span>
-                                                    </div>
-                                                    <p className="text-sm text-gray-600">{match.desc}</p>
+                                <button
+                                    onClick={() => handleFindMatches(item._id)}
+                                    className="mt-3 w-full px-3 py-2 bg-[#1a3a8a] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+                                >
+                                    {openMatchesId === item._id ? "Hide Matches" : "🔍 Find Possible Matches"}
+                                </button>
 
-                                                    {revealedContacts[match._id] ? (
-                                                        <p className="text-sm text-gray-500 mt-1">
-                                                            Contact: {match.contact}
-                                                        </p>
-                                                    ) : (
-                                                        <div className="mt-2">
-                                                            {verificationById[match._id] ? (
-                                                                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2">
-                                                                    <p className="text-xs font-semibold text-yellow-800 mb-1">
-                                                                        🔒 Ask the other person before sharing contact:
-                                                                    </p>
-                                                                    <p className="text-sm text-gray-700 italic mb-2">
-                                                                        "{verificationById[match._id]}"
-                                                                    </p>
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            setRevealedContacts((prev) => ({
-                                                                                ...prev,
-                                                                                [match._id]: true,
-                                                                            }))
-                                                                        }
-                                                                        className="text-xs px-3 py-1 bg-yellow-500 text-white rounded-md font-semibold hover:bg-yellow-600"
-                                                                    >
-                                                                        They answered correctly — show contact
-                                                                    </button>
-                                                                </div>
+                                {openMatchesId === item._id && (
+                                    <div className="mt-3 border-t pt-3">
+                                        {loadingMatchesId === item._id ? (
+                                            <p className="text-gray-500 italic text-sm">Searching for matches...</p>
+                                        ) : matchesById[item._id]?.length > 0 ? (
+                                            <div className="flex flex-col gap-3">
+                                                {matchesById[item._id].map((match) => (
+                                                    <div
+                                                        key={match._id}
+                                                        className="flex gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200"
+                                                    >
+                                                        {match.image && (
+                                                            <img
+                                                                src={match.image}
+                                                                alt={match.name}
+                                                                className="w-14 h-14 object-cover rounded-lg shrink-0"
+                                                            />
+                                                        )}
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex justify-between items-center gap-2">
+                                                                <h4 className="font-bold text-sm truncate">{match.name}</h4>
+                                                                <span className="text-xs text-gray-500 shrink-0">
+                                                                    {Math.round(match.matchScore * 100)}% match
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-xs text-gray-600 line-clamp-2">{match.desc}</p>
+
+                                                            {revealedContacts[match._id] ? (
+                                                                <p className="text-xs text-gray-500 mt-1">
+                                                                    Contact: {match.contact}
+                                                                </p>
                                                             ) : (
-                                                                <button
-                                                                    onClick={() => handleGetVerificationQuestion(match._id)}
-                                                                    className="text-xs px-3 py-1 bg-gray-200 text-gray-700 rounded-md font-semibold hover:bg-gray-300"
-                                                                >
-                                                                    {loadingVerificationId === match._id
-                                                                        ? "Generating question..."
-                                                                        : "🔒 Verify before contacting"}
-                                                                </button>
+                                                                <div className="mt-2">
+                                                                    {verificationById[match._id] ? (
+                                                                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2">
+                                                                            <p className="text-[11px] font-semibold text-yellow-800 mb-1">
+                                                                                🔒 Ask before sharing contact:
+                                                                            </p>
+                                                                            <p className="text-xs text-gray-700 italic mb-2">
+                                                                                "{verificationById[match._id]}"
+                                                                            </p>
+                                                                            <button
+                                                                                onClick={() =>
+                                                                                    setRevealedContacts((prev) => ({
+                                                                                        ...prev,
+                                                                                        [match._id]: true,
+                                                                                    }))
+                                                                                }
+                                                                                className="text-[11px] px-2 py-1 bg-yellow-500 text-white rounded-md font-semibold hover:bg-yellow-600"
+                                                                            >
+                                                                                Verified — show contact
+                                                                            </button>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <button
+                                                                            onClick={() => handleGetVerificationQuestion(match._id)}
+                                                                            className="text-[11px] px-2 py-1 bg-gray-200 text-gray-700 rounded-md font-semibold hover:bg-gray-300"
+                                                                        >
+                                                                            {loadingVerificationId === match._id
+                                                                                ? "Generating..."
+                                                                                : "🔒 Verify before contacting"}
+                                                                        </button>
+                                                                    )}
+                                                                </div>
                                                             )}
                                                         </div>
-                                                    )}
-                                                </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        ) : (
+                                            <p className="text-gray-500 italic text-sm">No possible matches found yet.</p>
+                                        )}
                                     </div>
-                                ) : (
-                                    <p className="text-gray-500 italic">No possible matches found yet.</p>
                                 )}
                             </div>
-                        )}
-                    </div>  
-                );
-            })
+                        );
+                    })}
+                </div>
             )}
         </div>
     );

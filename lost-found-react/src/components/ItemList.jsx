@@ -8,11 +8,47 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
     const [matchesById, setMatchesById] = useState({});
     const [loadingMatchesId, setLoadingMatchesId] = useState(null);
 
+    const [verificationById, setVerificationById] = useState({});
+    const [loadingVerificationId, setLoadingVerificationId] = useState(null);
+    const [revealedContacts, setRevealedContacts] = useState({});
+
     const toggleMenu = (index) => {
         setOpenMenuIndex(openMenuIndex === index ? null : index);
     };
 
+    async function handleGetVerificationQuestion(matchId) {
+        if (verificationById[matchId]) return; // already fetched
+
+        setLoadingVerificationId(matchId);
+
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(
+                `https://lost-found-backend-ajdo.onrender.com/api/items/${matchId}/verification-question`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (!res.ok) throw new Error("Failed to get verification question");
+
+            const data = await res.json();
+            setVerificationById((prev) => ({ ...prev, [matchId]: data.question }));
+        } catch (err) {
+            console.error("Verification question error:", err);
+            setVerificationById((prev) => ({
+                ...prev,
+                [matchId]: "Could not generate a question — ask the other person to describe the item in detail before sharing contact info.",
+            }));
+        } finally {
+            setLoadingVerificationId(null);
+        }
+    }
+
     async function handleFindMatches(itemId) {
+        // If already open, just close it
         if (openMatchesId === itemId) {
             setOpenMatchesId(null);
             return;
@@ -132,9 +168,45 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
                                                         </span>
                                                     </div>
                                                     <p className="text-sm text-gray-600">{match.desc}</p>
-                                                    <p className="text-sm text-gray-500 mt-1">
-                                                        Contact: {match.contact}
-                                                    </p>
+
+                                                    {revealedContacts[match._id] ? (
+                                                        <p className="text-sm text-gray-500 mt-1">
+                                                            Contact: {match.contact}
+                                                        </p>
+                                                    ) : (
+                                                        <div className="mt-2">
+                                                            {verificationById[match._id] ? (
+                                                                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2">
+                                                                    <p className="text-xs font-semibold text-yellow-800 mb-1">
+                                                                        🔒 Ask the other person before sharing contact:
+                                                                    </p>
+                                                                    <p className="text-sm text-gray-700 italic mb-2">
+                                                                        "{verificationById[match._id]}"
+                                                                    </p>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            setRevealedContacts((prev) => ({
+                                                                                ...prev,
+                                                                                [match._id]: true,
+                                                                            }))
+                                                                        }
+                                                                        className="text-xs px-3 py-1 bg-yellow-500 text-white rounded-md font-semibold hover:bg-yellow-600"
+                                                                    >
+                                                                        They answered correctly — show contact
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => handleGetVerificationQuestion(match._id)}
+                                                                    className="text-xs px-3 py-1 bg-gray-200 text-gray-700 rounded-md font-semibold hover:bg-gray-300"
+                                                                >
+                                                                    {loadingVerificationId === match._id
+                                                                        ? "Generating question..."
+                                                                        : "🔒 Verify before contacting"}
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         ))}

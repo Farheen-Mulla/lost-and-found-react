@@ -2,6 +2,7 @@ import Item from "../models/Item.js";
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 import { cosineSimilarity, generateEmbedding } from "../utils/embedding.js";
+import { generateVerificationQuestion } from "../utils/verification.js";
 
 export const getItems = async (req, res) => {
   try{
@@ -99,7 +100,6 @@ export const getMatches = async (req, res) => {
       score: cosineSimilarity(item.embedding, candidate.embedding),
     }));
 
-
     const SIMILARITY_THRESHOLD = 0.75;
     const relevant = scored.filter((entry) => entry.score >= SIMILARITY_THRESHOLD);
 
@@ -115,7 +115,6 @@ export const getMatches = async (req, res) => {
     res.status(500).json({ message: "Failed to find matches" });
   }
 };
-
 
 export const searchItems = async (req, res) => {
   try {
@@ -156,5 +155,23 @@ export const searchItems = async (req, res) => {
   } catch (error) {
     console.error("Search error:", error);
     res.status(500).json({ message: "Search failed" });
+  }
+};
+
+
+export const getVerificationQuestion = async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    const question = await generateVerificationQuestion(item.name, item.desc);
+
+    res.json({ question });
+  } catch (error) {
+    console.error("Verification question error:", error);
+    res.status(500).json({ message: "Failed to generate question" });
   }
 };

@@ -121,14 +121,14 @@ export const searchItems = async (req, res) => {
   try {
     const { q, status } = req.query;
 
-    
+   
     if (!q || q.trim() === "") {
       const filter = status && status !== "all" ? { status } : {};
       const items = await Item.find(filter).sort({ createdAt: -1 });
       return res.json(items);
     }
 
-    const queryEmbedding = await generateEmbedding(q);
+    const queryEmbedding = await generateEmbedding(q, "RETRIEVAL_QUERY");
 
     const filter = {
       embedding: { $exists: true, $ne: [] },
@@ -142,7 +142,8 @@ export const searchItems = async (req, res) => {
       score: cosineSimilarity(queryEmbedding, candidate.embedding),
     }));
 
-    const SIMILARITY_THRESHOLD = 0.65;
+    
+    const SIMILARITY_THRESHOLD = 0.5;
     const relevant = scored.filter((entry) => entry.score >= SIMILARITY_THRESHOLD);
 
     relevant.sort((a, b) => b.score - a.score);

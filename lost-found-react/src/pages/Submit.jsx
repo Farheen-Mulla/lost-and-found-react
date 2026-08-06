@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import ItemForm from "../components/ItemForm";
 
+const SUCCESS_DISPLAY_MS = 2000;
+
 export default function Submit({ reloadItems, isLoggedIn, onLogout }) {
   const navigate = useNavigate();
-  const [status, setStatus] = useState("idle"); 
+  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
@@ -45,8 +47,7 @@ export default function Submit({ reloadItems, isLoggedIn, onLogout }) {
 
       await reloadItems();
       setStatus("success");
-
-      setTimeout(() => navigate("/items"), 900);
+      setTimeout(() => navigate("/items"), SUCCESS_DISPLAY_MS);
     } catch (err) {
       console.error("Failed to submit:", err);
       setStatus("error");
@@ -58,14 +59,8 @@ export default function Submit({ reloadItems, isLoggedIn, onLogout }) {
 
   return (
     <AppLayout isLoggedIn={isLoggedIn} onLogout={onLogout}>
-      <div className="flex flex-col items-center py-10 px-4">
-        <div className="w-full max-w-lg animate-[fadeSlideIn_0.4s_ease-out]">
-          <h1 className="text-3xl font-bold mb-2 text-[#1a3a8a] text-center">
-            Report an Item
-          </h1>
-          <p className="text-gray-500 text-center mb-6">
-            Found something, or lost it? Fill in the details below.
-          </p>
+      <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-b from-[#f4f7fd] to-white flex flex-col items-center py-12 px-4">
+        <div className="w-full max-w-md animate-[fadeSlideIn_0.4s_ease-out]">
 
           {status === "error" && (
             <div
@@ -81,28 +76,20 @@ export default function Submit({ reloadItems, isLoggedIn, onLogout }) {
           )}
 
           {status === "success" ? (
-            <div className="flex flex-col items-center justify-center py-16 animate-[fadeSlideIn_0.3s_ease-out]">
+            <div className="bg-white rounded-2xl shadow-[0_4px_24px_rgba(26,58,138,0.08)] border border-[#e3eaf7] flex flex-col items-center justify-center py-16 px-6 animate-[fadeSlideIn_0.3s_ease-out] overflow-hidden">
               <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4 animate-[popIn_0.4s_ease-out]">
                 <svg className="w-9 h-9 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </div>
-              <p className="text-lg font-medium text-gray-700">Item submitted!</p>
-              <p className="text-sm text-gray-400">Redirecting you to the listings…</p>
+              <p className="text-lg font-semibold text-[#1a3a8a]">Item submitted!</p>
+              <p className="text-sm text-slate-400 mb-5">Taking you to the listings…</p>
+              <div className="w-full h-1 bg-[#e3eaf7] rounded-full overflow-hidden">
+                <div className="h-full bg-[#3b8bf6] progress-drain" />
+              </div>
             </div>
           ) : (
-            <div className={`relative transition-opacity ${status === "submitting" ? "opacity-60 pointer-events-none" : ""}`}>
-              <ItemForm onAddItem={handleAddAndRedirect} />
-
-              {status === "submitting" && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full shadow">
-                    <span className="w-4 h-4 border-2 border-[#1a3a8a] border-t-transparent rounded-full animate-spin" />
-                    <span className="text-sm text-[#1a3a8a] font-medium">Submitting…</span>
-                  </div>
-                </div>
-              )}
-            </div>
+            <ItemForm onAddItem={handleAddAndRedirect} isSubmitting={status === "submitting"} />
           )}
         </div>
       </div>
@@ -121,6 +108,13 @@ export default function Submit({ reloadItems, isLoggedIn, onLogout }) {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-4px); }
           75% { transform: translateX(4px); }
+        }
+        .progress-drain {
+          animation: drain ${SUCCESS_DISPLAY_MS}ms linear forwards;
+        }
+        @keyframes drain {
+          from { width: 100%; }
+          to { width: 0%; }
         }
       `}</style>
     </AppLayout>

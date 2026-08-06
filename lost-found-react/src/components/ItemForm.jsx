@@ -23,7 +23,6 @@ function ItemForm({ editingItem, onAddItem, onUpdateItem, isSubmitting }) {
     }
   }, [editingItem]);
 
-  
   useEffect(() => {
     if (!image) return;
     const url = URL.createObjectURL(image);
@@ -78,7 +77,7 @@ function ItemForm({ editingItem, onAddItem, onUpdateItem, isSubmitting }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md bg-white rounded-2xl shadow-[0_4px_24px_rgba(26,58,138,0.08)] border border-[#e3eaf7] p-7 flex flex-col gap-5"
+      className="w-full max-w-md bg-[#fbfdff] rounded-2xl shadow-[0_8px_30px_rgba(26,58,138,0.12)] border border-[#d7e2f7] p-7 flex flex-col gap-5"
     >
       <div className="stagger-in" style={{ "--d": "0ms" }}>
         <p className="text-xs font-semibold tracking-wide text-[#3b8bf6] uppercase mb-1">
@@ -89,10 +88,7 @@ function ItemForm({ editingItem, onAddItem, onUpdateItem, isSubmitting }) {
         </h2>
       </div>
 
-      <div
-        className="stagger-in"
-        style={{ "--d": "60ms" }}
-      >
+      <div className="stagger-in" style={{ "--d": "60ms" }}>
         <label
           htmlFor="upload-image"
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -103,7 +99,7 @@ function ItemForm({ editingItem, onAddItem, onUpdateItem, isSubmitting }) {
             handleFile(e.dataTransfer.files?.[0]);
           }}
           className={`relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed cursor-pointer overflow-hidden transition-colors duration-200 h-40
-            ${isDragging ? "border-[#3b8bf6] bg-[#eef4ff]" : "border-[#c7d7f5] bg-[#f7faff] hover:border-[#3b8bf6] hover:bg-[#eef4ff]"}`}
+            ${isDragging ? "border-[#3b8bf6] bg-[#eef4ff]" : "border-[#c7d7f5] bg-white hover:border-[#3b8bf6] hover:bg-[#eef4ff]"}`}
         >
           {previewUrl ? (
             <>

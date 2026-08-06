@@ -116,11 +116,11 @@ export default function Register() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+                   type="button"
+                   onClick={() => setShowPassword(!showPassword)}
+                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
                   >
-                    {showPassword ? <RiEyeLine /> : <RiEyeOffLine />}
+                    {showPassword ? <RiEyeOffLine size={20} /> : <RiEyeLine size={20} />}
                   </button>
                 </div>
               </div>

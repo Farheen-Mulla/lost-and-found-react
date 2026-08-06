@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-function ItemList({ items, onDeleteItem, onEditItem }) {
+function ItemList({ items, isLoading, onDeleteItem, onEditItem }) {
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
     const loggedInUserId = localStorage.getItem("userId");
     const menuRef = useRef(null);
@@ -19,7 +19,6 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
         setOpenMenuIndex(openMenuIndex === index ? null : index);
     };
 
-    
     useEffect(() => {
         function handleClickOutside(event) {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -193,9 +192,24 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-[#1a3a8a] mb-6">All Reports</h2>
+            <h2 className="text-3xl font-bold text-[#1a3a8a] mb-6">Browse Items</h2>
 
-            {items.length === 0 ? (
+            {isLoading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="bg-white rounded-xl shadow-md border border-gray-100 p-4 animate-pulse"
+                        >
+                            <div className="h-5 bg-gray-200 rounded w-3/4 mb-3" />
+                            <div className="h-40 bg-gray-200 rounded-lg mb-3" />
+                            <div className="h-3 bg-gray-200 rounded w-full mb-2" />
+                            <div className="h-3 bg-gray-200 rounded w-2/3 mb-4" />
+                            <div className="h-9 bg-gray-200 rounded-lg w-full" />
+                        </div>
+                    ))}
+                </div>
+            ) : items.length === 0 ? (
                 <div className="text-center py-20">
                     <p className="text-gray-500 text-xl">No items to display yet.</p>
                     <p className="text-gray-400 text-sm mt-1">Reported items will show up here.</p>

@@ -6,6 +6,7 @@ import ItemForm from "../components/ItemForm";
 
 export default function Items({
   items,
+  isLoadingItems,
   onDeleteItem,
   onUpdateItem,
   isLoggedIn,
@@ -48,7 +49,7 @@ export default function Items({
       }
     }, 400); 
 
-    
+  
     return () => clearTimeout(timer);
   }, [searchQuery, searchStatus]);
 
@@ -105,6 +106,7 @@ export default function Items({
 
         <ItemList
           items={displayedItems}
+          isLoading={isLoadingItems}
           onDeleteItem={onDeleteItem}
           onEditItem={handleEdit}
         />

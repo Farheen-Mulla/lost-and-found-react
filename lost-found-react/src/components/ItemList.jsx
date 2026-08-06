@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function ItemList({ items, onDeleteItem, onEditItem }) {
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
     const loggedInUserId = localStorage.getItem("userId");
+    const menuRef = useRef(null);
 
     const [openMatchesId, setOpenMatchesId] = useState(null);
     const [matchesById, setMatchesById] = useState({});
@@ -15,6 +16,21 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
     const toggleMenu = (index) => {
         setOpenMenuIndex(openMenuIndex === index ? null : index);
     };
+
+    
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setOpenMenuIndex(null);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     async function handleGetVerificationQuestion(matchId) {
         if (verificationById[matchId]) return;
@@ -99,7 +115,10 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
                                 <div className="flex justify-between items-start gap-2">
                                     <h3 className="text-lg font-bold text-gray-900 line-clamp-1">{item.name}</h3>
                                     {isOwner && (
-                                        <div className="relative shrink-0">
+                                        <div
+                                            className="relative shrink-0"
+                                            ref={openMenuIndex === index ? menuRef : null}
+                                        >
                                             <button
                                                 onClick={() => toggleMenu(index)}
                                                 className="text-xl font-bold p-1 px-2 hover:bg-gray-100 rounded-full leading-none"

@@ -1,65 +1,128 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import ItemForm from "../components/ItemForm";
 
-export default function Submit({reloadItems, isLoggedIn, onLogout}) {
+export default function Submit({ reloadItems, isLoggedIn, onLogout }) {
   const navigate = useNavigate();
+  const [status, setStatus] = useState("idle"); 
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
-    if(!isLoggedIn){
-      alert("You must be logged in to report an item.");
-      navigate("/login");
+    if (!isLoggedIn) {
+      navigate("/login", { state: { from: "/submit" } });
     }
   }, [isLoggedIn, navigate]);
 
   const handleAddAndRedirect = async (newItem) => {
-    try{
-       const formData = new FormData();
+    setStatus("submitting");
+    setErrorMsg("");
 
-       formData.append("name",newItem.name);
-       formData.append("desc",newItem.desc);
-       formData.append("contact",newItem.contact);
-       formData.append("status",newItem.status);
-       formData.append("image",newItem.image);
+    try {
+      const formData = new FormData();
+      formData.append("name", newItem.name);
+      formData.append("desc", newItem.desc);
+      formData.append("contact", newItem.contact);
+      formData.append("status", newItem.status);
+      formData.append("image", newItem.image);
 
-       const token = 
-       localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-       const res = await fetch(
+      const res = await fetch(
         "https://lost-found-backend-ajdo.onrender.com/api/upload",
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           body: formData,
         }
-       );
+      );
 
-       const data = await res.json();
-       console.log("response from backend:", data);
-       
-       if(!res.ok){
+      const data = await res.json();
+
+      if (!res.ok) {
         throw new Error(data.message || "Failed to submit item");
-       }
-     
-       await reloadItems(); // Refresh the list after adding
-       alert("Item submitted successfully!");
-       navigate("/items");
-       
-  }catch(err) {
-    console.error("Failed to submit:", err);
-    alert("Failed to submit item. Check console.");
-  }
-};
+      }
+
+      await reloadItems();
+      setStatus("success");
+
+      setTimeout(() => navigate("/items"), 900);
+    } catch (err) {
+      console.error("Failed to submit:", err);
+      setStatus("error");
+      setErrorMsg(err.message || "Something went wrong. Please try again.");
+    }
+  };
+
+  if (!isLoggedIn) return null;
 
   return (
     <AppLayout isLoggedIn={isLoggedIn} onLogout={onLogout}>
-      <div className="flex flex-col items-center py-10">
-        <h1 className="text-3xl font-bold mb-6 text-[#1a3a8a]">Report an Item</h1>
-        {isLoggedIn ? (<ItemForm onAddItem={handleAddAndRedirect} /> ) : (<p className="text-gray-500">Please log in to submit an item.</p>)}
+      <div className="flex flex-col items-center py-10 px-4">
+        <div className="w-full max-w-lg animate-[fadeSlideIn_0.4s_ease-out]">
+          <h1 className="text-3xl font-bold mb-2 text-[#1a3a8a] text-center">
+            Report an Item
+          </h1>
+          <p className="text-gray-500 text-center mb-6">
+            Found something, or lost it? Fill in the details below.
+          </p>
+
+          {status === "error" && (
+            <div
+              role="alert"
+              className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 animate-[shake_0.4s_ease-in-out]"
+            >
+              <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
+          {status === "success" ? (
+            <div className="flex flex-col items-center justify-center py-16 animate-[fadeSlideIn_0.3s_ease-out]">
+              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4 animate-[popIn_0.4s_ease-out]">
+                <svg className="w-9 h-9 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              </div>
+              <p className="text-lg font-medium text-gray-700">Item submitted!</p>
+              <p className="text-sm text-gray-400">Redirecting you to the listings…</p>
+            </div>
+          ) : (
+            <div className={`relative transition-opacity ${status === "submitting" ? "opacity-60 pointer-events-none" : ""}`}>
+              <ItemForm onAddItem={handleAddAndRedirect} />
+
+              {status === "submitting" && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full shadow">
+                    <span className="w-4 h-4 border-2 border-[#1a3a8a] border-t-transparent rounded-full animate-spin" />
+                    <span className="text-sm text-[#1a3a8a] font-medium">Submitting…</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+          0% { transform: scale(0.6); opacity: 0; }
+          80% { transform: scale(1.05); opacity: 1; }
+          100% { transform: scale(1); }
+        }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-4px); }
+          75% { transform: translateX(4px); }
+        }
+      `}</style>
     </AppLayout>
   );
 }

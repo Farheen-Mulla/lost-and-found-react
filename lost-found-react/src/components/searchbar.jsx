@@ -22,7 +22,7 @@ function SearchBar({ searchQuery, onSearchChange, searchStatus, onStatusChange }
                     >
                         ✕
                     </button>
-                )}
+                )} 
             </div>
 
             <select

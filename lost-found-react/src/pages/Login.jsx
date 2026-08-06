@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import PublicLayout from "../layouts/PublicLayout";
 import { useState } from "react";
+import { RiEyeLine, RiEyeOffLine } from "@remixicon/react";
 
 export default function Login({ onLogin }) {
   const navigate = useNavigate();
@@ -99,7 +100,7 @@ export default function Login({ onLogin }) {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
                   >
-                    {showPassword ? <i class="ri-eye-line"></i> : <i class="ri-eye-off-line"></i>}
+                    {showPassword ? <RiEyeLine /> : <RiEyeOffLine />}
                   </button>
                 </div>
               </div>

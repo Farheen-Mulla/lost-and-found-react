@@ -17,7 +17,6 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
         setOpenMenuIndex(openMenuIndex === index ? null : index);
     };
 
-    
     useEffect(() => {
         function handleClickOutside(event) {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -149,7 +148,7 @@ function ItemList({ items, onDeleteItem, onEditItem }) {
                                     <img
                                         src={item.image}
                                         alt={item.name}
-                                        className="w-full h-40 object-cover rounded-lg mt-3 mb-3"
+                                        className="w-full h-40 object-contain bg-gray-50 rounded-lg mt-3 mb-3"
                                     />
                                 ) : (
                                     <div className="w-full h-40 rounded-lg mt-3 mb-3 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">

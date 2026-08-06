@@ -103,13 +103,13 @@ function ItemList({ items, isLoading, onDeleteItem, onEditItem }) {
                         e.stopPropagation();
                         handleFindMatches(item._id);
                     }}
-                    className="mt-3 w-full px-3 py-2 bg-[#1a3a8a] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+                    className="mt-3 w-full px-3 py-2 bg-[#1a3a8a] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 active:scale-[0.97] transition-all"
                 >
                     {openMatchesId === item._id ? "Hide Matches" : "🔍 Find Possible Matches"}
                 </button>
 
                 {openMatchesId === item._id && (
-                    <div className="mt-3 border-t pt-3">
+                    <div className="mt-3 border-t pt-3 animate-[fadeIn_0.25s_ease-out]">
                         {loadingMatchesId === item._id ? (
                             <p className="text-gray-500 italic text-sm">Searching for matches...</p>
                         ) : matchesById[item._id]?.length > 0 ? (
@@ -222,7 +222,8 @@ function ItemList({ items, isLoading, onDeleteItem, onEditItem }) {
                             <div
                                 key={item._id}
                                 onClick={() => setSelectedItem(item)}
-                                className="relative bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-200 border border-gray-100 p-4 flex flex-col h-full cursor-pointer"
+                                style={{ animationDelay: `${Math.min(index, 10) * 40}ms` }}
+                                className="relative bg-white rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-gray-100 p-4 flex flex-col h-full cursor-pointer opacity-0 animate-[fadeInUp_0.4s_ease-out_forwards]"
                             >
                                 <div className="flex justify-between items-start gap-2">
                                     <h3 className="text-lg font-bold text-gray-900 line-clamp-1">{item.name}</h3>
@@ -241,7 +242,7 @@ function ItemList({ items, isLoading, onDeleteItem, onEditItem }) {
                                                 &#8942;
                                             </button>
                                             {openMenuIndex === index && (
-                                                <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                                                <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden origin-top animate-[slideDown_0.15s_ease-out]">
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
@@ -305,15 +306,15 @@ function ItemList({ items, isLoading, onDeleteItem, onEditItem }) {
             {selectedItem && (
                 <div
                     onClick={() => setSelectedItem(null)}
-                    className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+                    className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease-out]"
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white rounded-xl shadow-2xl w-full max-w-xl max-h-[85vh] overflow-y-auto p-6 relative"
+                        className="bg-white rounded-xl shadow-2xl w-full max-w-xl max-h-[85vh] overflow-y-auto p-6 relative animate-[scaleIn_0.25s_ease-out]"
                     >
                         <button
                             onClick={() => setSelectedItem(null)}
-                            className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100"
+                            className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 hover:rotate-90 transition-transform duration-200"
                         >
                             &times;
                         </button>

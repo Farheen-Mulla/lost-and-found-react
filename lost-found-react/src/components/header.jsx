@@ -93,7 +93,7 @@ function Header({ searchQuery, onSearchChange, searchStatus, onStatusChange, isL
                             </button>
 
                             {showMenu && (
-                                <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg overflow-hidden">
+                                <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg overflow-hidden origin-top animate-[slideDown_0.15s_ease-out]">
                                     <button
                                         onClick={handleLogoutClick}
                                         className="w-full text-left px-4 py-2 hover:bg-red-100"
@@ -114,14 +114,15 @@ function Header({ searchQuery, onSearchChange, searchStatus, onStatusChange, isL
                 <div className="order-2 lg:hidden ml-auto relative" ref={mobileNavRef}>
                     <button
                         onClick={() => setShowMobileNav(!showMobileNav)}
-                        className="text-2xl px-2 py-1 rounded-lg hover:bg-white/10"
+                        className="text-2xl px-2 py-1 rounded-lg hover:bg-white/10 transition-transform duration-200"
+                        style={{ transform: showMobileNav ? "rotate(90deg)" : "rotate(0deg)" }}
                         aria-label="Toggle menu"
                     >
                         ☰
                     </button>
 
                     {showMobileNav && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white text-[#1a3a8a] rounded-lg shadow-lg overflow-hidden flex flex-col py-1 z-50">
+                        <div className="absolute right-0 mt-2 w-48 bg-white text-[#1a3a8a] rounded-lg shadow-lg overflow-hidden flex flex-col py-1 z-50 origin-top animate-[slideDown_0.15s_ease-out]">
                             <Link
                                 className="px-4 py-2 hover:bg-blue-50"
                                 to="/"

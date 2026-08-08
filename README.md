@@ -167,11 +167,11 @@ VITE_API_URL=
 # 📸 Screenshots
 
 - 🏠 ![Landing Page](./lost-found-react/screenshots/Home.png)
-- 🔐 ![Login](./lost-found-react/screenshots/Login.png)
+- 🔐 ![Login](./lost-found-react/screenshots/login.png)
 - 🔐 ![Register](./lost-found-react/screenshots/Register.png)
-- 📦 ![Item Listings](./lost-found-react/screenshots/Items.png)
+- 📦 ![Item Listings](./lost-found-react/screenshots/items.png)
 - 📦 ![Item Card](./lost-found-react/screenshots/ItemCard.png)
-- ➕ ![Report Item](./lost-found-react/screenshots/Submit.png)
+- ➕ ![Report Item](./lost-found-react/screenshots/submit.png)
 
 
 ---

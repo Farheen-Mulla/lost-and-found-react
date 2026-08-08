@@ -6,7 +6,6 @@ import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// Same temp-storage pattern as your other upload routes
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
@@ -49,7 +48,6 @@ Look at this image and respond with ONLY valid JSON in this exact format, nothin
 
     const text = response.text;
 
-    // Clean up in case the model wraps the JSON in ```json fences
     const cleaned = text.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(cleaned);
 
@@ -61,7 +59,6 @@ Look at this image and respond with ONLY valid JSON in this exact format, nothin
     console.error("AI describe error:", error);
     res.status(500).json({ message: "Failed to generate description" });
   } finally {
-    // Clean up the temp file, same as your other routes
     if (req.file) {
       fs.unlink(req.file.path, (err) => {
         if (err) console.log("File delete error:", err);

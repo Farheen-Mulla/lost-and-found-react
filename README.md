@@ -1,214 +1,211 @@
-# Lost & Found Web App 🧭
+# 🧭 FindIt – AI-Powered Lost & Found Platform
 
 ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
-![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?logo=jsonwebtokens&logoColor=white)
 ![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-4285F4?logo=google&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?logo=render&logoColor=black)
 
-Full-Stack Cloud-Deployed Web Application
-
-Lost & Found is a fully deployed full-stack web application that allows users to report lost or found items, browse listings, and manage submissions.
-
-## The project follows a scalable production-style architecture using:
-
-- React (Frontend)
-- Node.js + Express (Backend)
-- MongoDB Atlas (Database)
-- Vercel (Frontend Deployment)
-- Render (Backend Deployment)
-
-This project evolved from a frontend-only MVP into a fully integrated cloud-based full-stack system.
+**FindIt** is a full-stack AI-powered Lost & Found platform that helps users report, discover, and manage lost or found items. Built with the MERN stack, it combines secure authentication, cloud image storage, semantic AI search, and intelligent ownership verification to create a smarter lost-and-found experience.
 
 ---
 
-## 🌍 Live Demo
+## 🌐 Live Demo
 
-### Frontend (Vercel):
-👉 https://lost-and-found-react.vercel.app/
+**Frontend:** https://findit-platform.vercel.app/
 
-### Backend (Render):
-https://lost-found-backend-ajdo.onrender.com
+**Backend API:** https://lost-found-backend-ajdo.onrender.com
 
 ---
 
-## 🚀 Features
+# ✨ Features
 
-### ✅ Current (Production)
-
-- Responsive landing page
-- Submit lost/found items
-- View all submitted items
-- Upload item images(Cloudinary)
-- Edit existing items
-- Delete items
-- Search items by keyword
-- Filter items by Lost/Found status
-- Persistent database storage (MongoDB Atlas)
-- Real backend API integration
-- Cloud deployment (Frontend + Backend)
-- RESTful API architecture
-- Environment variable configuration
-- CORS-enabled secure communication
-- MVC backend structure
-- Clean Git-based deployment workflow
-
----
-
-### 🔜 Upcoming Enhancements
-
+### 🔐 Authentication & Security
+- User Registration & Login
 - JWT Authentication
-- User accounts
-- Ownership-based item control
-- Advanced search & filtering improvements 
-- Pagination
-- Loading states & better UX feedback
+- Protected Routes
+- Password Hashing using bcrypt
+- User-specific item management
+
+### 📦 Item Management
+- Report Lost or Found Items
+- Edit & Delete Your Listings
+- Upload Images via Cloudinary
+- View All Items
+- Responsive UI
+
+### 🤖 AI Features
+
+#### 🔍 Semantic Search
+Instead of relying on simple keyword matching, FindIt uses **vector embeddings** and **cosine similarity** to understand the meaning behind search queries, helping users discover relevant items even when different words are used.
+
+#### 🧠 AI Ownership Verification
+When an item is reported, **Google Gemini** generates a unique verification question based on the item's description. This helps verify genuine ownership by asking about details that only the real owner is likely to know.
+
+Example:
+
+> Item: Black Wallet
+
+AI-generated question:
+
+> *"What distinguishing mark is present on the wallet?"*
+
+This adds an intelligent verification layer to reduce false ownership claims.
 
 ---
 
-## 🧱 Tech Stack
+# 🛠 Tech Stack
 
-### Frontend
+| Category | Technologies |
+|----------|--------------|
+| Frontend | React, Vite, Tailwind CSS, React Router |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas, Mongoose |
+| Authentication | JWT, bcrypt |
+| AI | Google Gemini API, Embeddings, Cosine Similarity |
+| Image Storage | Cloudinary, Multer |
+| Deployment | Vercel, Render |
 
-- React
-- React Router DOM
-- Tailwind CSS
-- Vite
-- Fetch API
+---
+
+# 🏗️ Architecture
+
+```
+                React + Vite
+                      │
+                      ▼
+             Express REST API
+                      │
+      ┌───────────────┼───────────────┐
+      ▼               ▼               ▼
+ MongoDB Atlas   Cloudinary      AI Services
+                                    │
+                     ┌──────────────┴──────────────┐
+                     ▼                             ▼
+              Semantic Search          Gemini Verification
+```
+
+---
+
+# 📂 Project Structure
+
+```
+FindIt/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
+├── backend/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── config/
+│   └── package.json
+│
+└── README.md
+```
+
+---
+
+# ⚙️ Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/Farheen-Mulla/FindIt.git
+cd FindIt
+```
 
 ### Backend
 
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
-- Multer
-- Cloudinary
-- CORS
-- dotenv
-
-### Deployment
-
-- Vercel (Frontend Hosting)
-- Render (Backend Hosting)
-- MongoDB Atlas (Cloud Database)
-- Cloudinary (Image Storage)
-
-
----
-
-## 🏗 Architecture Overview
-
-```
-Users (Browser)
-        ↓
-Vercel (React Frontend)
-        ↓
-Render (Node/Express Backend API)
-        ↓
-MongoDB Atlas (Cloud Database)
+```bash
+cd backend
+npm install
+npm start
 ```
 
-This mirrors real-world production architecture used in modern SaaS applications.
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ---
 
-## 📂 Project Structure
+# 🔑 Environment Variables
 
-FINDIT-PROJECT/
-│
-├── lost-found-React/        # Frontend (React + Vite)
-├── lost-found-backend/      # Backend (Node.js + Express)
-└── README.md
+### Backend (.env)
 
----
+```env
+MONGODB_URI=
+JWT_SECRET=
+GEMINI_API_KEY=
 
-## 📸 Screenshots
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
 
-![Landing Page](./lost-found-react/screenshots/landing.png)
-![Submit Page](./lost-found-react/screenshots/submit.png)
-![Items Page](./lost-found-react/screenshots/items.png)
-![Login Page](./lost-found-react/screenshots/login.png)
+### Frontend (.env)
 
----
-
-## 🔐 Environment Variables
-
-Sensitive credentials such as MongoDB connection strings are stored using environment variables via:
-
-- ".env" (local development)
-- Render Dashboard (production)
-
-No secrets are committed to GitHub.
+```env
+VITE_API_URL=
+```
 
 ---
 
-## 📦 Current Capabilities
+# 📸 Screenshots
 
-- Persistent data storage (MongoDB Atlas)
-- Cloud-hosted backend API
-- Fully deployed frontend
-- Image upload and storage (cloudinary)
-- Edit existing items
-- Delete items
-- Search and filter items
-- Production-ready configuration
-- Clean commit history
-- MVC backend structure
+- 🏠 ![Landing Page](./lost-found-react/screenshots/Home.png)
+- 🔐 ![Login](./lost-found-react/screenshots/Login.png)
+- 🔐 ![Register](./lost-found-react/screenshots/Register.png)
+- 📦 ![Item Listings](./lost-found-react/screenshots/Items.png)
+- 📦 ![Item Card](./lost-found-react/screenshots/ItemCard.png)
+- ➕ ![Report Item](./lost-found-react/screenshots/Submit.png)
+
 
 ---
 
-## 🛣 Development Phases
+# 🚀 Future Enhancements
 
-### ✅ Phase 1 – Frontend MVP (Completed)
-
-- UI development
-- Routing
-- LocalStorage persistence
-- Fake authentication
-- Initial deployment
-
-### ✅ Phase 2 – Backend Integration (Completed)
-
-- Express API
-- MongoDB Atlas connection
-- MVC restructuring
-- Environment variable setup
-- Render deployment
-- Full frontend-backend integration
-
-### 🔜 Phase 3 – Feature Enhancements
-
-- JWT Authentication
-- Authorization middleware
-- Production-level validation
-- UI/UX improvements
+- 📍 Location-based search
+- 💬 Real-time messaging between users
+- 🔔 Email notifications
+- 📱 Progressive Web App (PWA)
+- 🖼️ Image similarity search
+- 🛡️ Admin dashboard
+- 📊 Analytics Dashboard
 
 ---
 
-## 💼 Why I Built This
+# 💡 Why This Project?
 
-This project was built to:
-
-- Practice full-stack architecture design
-- Implement frontend-backend integration
-- Work with MongoDB Atlas
-- Understand environment variables
-- Learn production deployment workflows
-- Gain hands-on experience with Vercel & Render
-- Build a cloud-based portfolio project
+FindIt was built to gain hands-on experience with production-ready full-stack development while exploring practical AI integration. The project combines authentication, cloud services, REST APIs, semantic search, and generative AI to solve a real-world problem using modern web technologies.
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
-Farheen Mulla
-Aspiring Full-Stack Developer 
-LinkedIn:
-https://www.linkedin.com/in/farheen-mulla-413335335/
+**Farheen Mulla**
+
+- GitHub: https://github.com/Farheen-Mulla
+- LinkedIn: https://www.linkedin.com/in/farheen-mulla-413335335/
 
 ---
 
-⭐ If you found this project helpful, feel free to star the repository.
+## ⭐ Show Your Support
+
+If you found this project interesting, consider giving it a **⭐ Star** on GitHub. It helps others discover the project and supports my work!
+
+---
+**Built with ❤️ using the MERN Stack + Google Gemini AI**
